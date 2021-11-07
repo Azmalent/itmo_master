@@ -1,10 +1,31 @@
+#include <cstdio>
+#include <fstream>
 #include <iostream>
 #include "game.h"
 
 using namespace std;
 
+HammurapiGame createGame()
+{
+    ifstream fin(SAVE_FILE_NAME);
+    if (fin.good())
+    {
+        cout << "\nFound a save file. Would you like to continue your previous game? (y/n) ";
+        char c;
+        cin >> c;
+        if (c == 'y') 
+        {
+            HammurapiGame game = HammurapiGame::load(fin);
+            remove(SAVE_FILE_NAME);
+            return game; 
+        }
+    }
+
+    return HammurapiGame();
+}
+
 int main() 
 {
-    GameState game;
-    game.start();
+    HammurapiGame game = createGame();
+    game.play();
 }
