@@ -26,6 +26,7 @@ private:
     void extend();
     inline void initElement(int index, const T& value);
 
+    class ConstIterator;
     class Iterator;
 
 public:
@@ -45,9 +46,9 @@ public:
     T& operator[](int index);
 
     inline Iterator iterator();
-    inline const Iterator c_iterator();
+    inline ConstIterator c_iterator();
     inline Iterator reverseIterator();
-    inline const Iterator c_reverseIterator();
+    inline ConstIterator c_reverseIterator();
 };
 
 //Constructors, assignment and destructor
@@ -221,24 +222,19 @@ T& ArrayList<T>::operator[](int index)
 
 //Iterators
 template<typename T>
-class ArrayList<T>::Iterator
+class ArrayList<T>::ConstIterator
 {
-private:
+protected:
     ArrayList<T>& list;
     int curr;
     bool reverse;
 
 public:
-    Iterator(ArrayList<T>& list, bool reverse = false) : list(list), curr(reverse ? list._size - 1 : 0), reverse(reverse) {};
+    ConstIterator(ArrayList<T>& list, bool reverse = false) : list(list), curr(reverse ? list._size - 1 : 0), reverse(reverse) {};
 
     const T& get() const
     {
         return list[curr];
-    }
-
-    void set(const T& value)
-    {
-        list.initElement(curr, value);
     }
 
     void next()
@@ -265,15 +261,28 @@ public:
 };
 
 template<typename T>
+class ArrayList<T>::Iterator : public ConstIterator
+{
+
+public:
+    Iterator(ArrayList<T>& list, bool reverse = false) : ConstIterator(list, reverse) {}
+
+    void set(const T& value)
+    {
+        this->list.initElement(this->curr, value);
+    }
+};
+
+template<typename T>
 inline typename ArrayList<T>::Iterator ArrayList<T>::iterator()
 {
     return Iterator(*this);
 }
 
 template<typename T>
-inline const typename ArrayList<T>::Iterator ArrayList<T>::c_iterator()
+inline typename ArrayList<T>::ConstIterator ArrayList<T>::c_iterator()
 {
-    return Iterator(*this);
+    return ConstIterator(*this);
 }
 
 template<typename T>
@@ -283,9 +292,9 @@ inline typename ArrayList<T>::Iterator ArrayList<T>::reverseIterator()
 }
 
 template<typename T>
-inline const typename ArrayList<T>::Iterator ArrayList<T>::c_reverseIterator()
+inline typename ArrayList<T>::ConstIterator ArrayList<T>::c_reverseIterator()
 {
-    return Iterator(*this, true);
+    return ConstIterator(*this, true);
 }
 
 #endif
