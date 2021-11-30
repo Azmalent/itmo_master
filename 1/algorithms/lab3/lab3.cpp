@@ -12,7 +12,7 @@ int main()
         cout << array[i] << ((i < 9) ? ", " : "\n\n");
     }
 
-    my_sort(array,array + 9);
+    my_sort(array,10);
     cout << "After: \n";
     for (int i = 0; i < 10; i++)
     {
