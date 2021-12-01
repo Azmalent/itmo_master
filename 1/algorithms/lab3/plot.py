@@ -15,6 +15,10 @@ def read_values(filename):
     return np.array(xs), np.array(ys)
 
 
+# Insertion sort
+ix, iy = read_values('isort.txt')
+ip = np.polyfit(ix, iy, 2)
+
 # Quicksort
 qx, qy = read_values('qsort.txt')
 qp = np.polyfit(qx, qy, 2)
@@ -22,13 +26,15 @@ qp = np.polyfit(qx, qy, 2)
 
 #Drawing the plot
 fig = plt.figure()
-x = np.linspace(0, 250, 5)
+x = np.linspace(0, 100, 100)
 
 plt.title('Sorting speed')
-plt.xlabel('Min elements for quicksort')
+plt.xlabel('Array size')
 plt.ylabel('Time (mcs)')
 plt.grid()
 
-plt.plot(qx, qy, 'g.', x, np.polyval(qp, x), 'b-')
+plt.plot(x, np.polyval(ip, x), color='navy', label='Insertion sort')
+plt.plot(x, np.polyval(qp, x), color='red', label='Quicksort')
 
+plt.legend()
 plt.show()

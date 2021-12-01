@@ -44,6 +44,9 @@ public:
     const T& operator[](int index) const;
     T& operator[](int index);
 
+	T* begin();
+	T* end();
+
     inline Iterator iterator();
     inline ConstIterator c_iterator() const;
     inline Iterator reverseIterator();
@@ -216,7 +219,17 @@ T& ArrayList<T>::operator[](int index)
     return array[index];
 }
 
+template<typename T>
+T* ArrayList<T>::begin()
+{
+	return array;
+}
 
+template<typename T>
+T* ArrayList<T>::end()
+{
+	return array + size();
+}
 
 //Iterators
 template<typename T>

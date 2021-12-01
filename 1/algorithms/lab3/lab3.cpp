@@ -4,49 +4,67 @@
 #include <iostream>
 #include <stdexcept>
 
-#define ARRAY_SIZE 1000
-#define MIN_M 5
-#define MAX_M 250
+#define MAX_ARRAY_SIZE 100
+#define SORTING_ITERATIONS 1000
 
 #define ARRAY_FILENAME "../array.txt"
+#define ISORT_FILENAME "../isort.txt"
 #define QSORT_FILENAME "../qsort.txt"
 
 using namespace std;
 using namespace std::chrono;
 
-void assert_sorted(int* array)
+void measure(int* array, std::function<void(int*, int*)> sort, const char* filename)
 {
-    for (int i = 1; i < ARRAY_SIZE; i++)
+    ofstream fout(filename);
+    if (fout.good())
     {
-        if (array[i] < array[i-1]) throw std::exception();
+        for (int size = 1; size <= MAX_ARRAY_SIZE; size++)
+        {
+            int arrayCopy[size];
+
+            auto startTime = steady_clock::now();
+
+            for (int k = 0; k < SORTING_ITERATIONS; k++)
+            {
+                for (int i = 0; i < size; i++)
+                {
+                    arrayCopy[i] = array[i];
+                }
+
+                sort(arrayCopy, arrayCopy + size - 1);
+            }
+
+            auto endTime = steady_clock::now();
+
+            auto time = duration<double, milli>(endTime - startTime);
+            fout << size << ' ' << time.count() << '\n';
+        }
     }
+
+    fout.close();
 }
 
 int main()
 {
-    int baseArray[ARRAY_SIZE], array[ARRAY_SIZE];
+    int array[MAX_ARRAY_SIZE];
+
     ifstream fin(ARRAY_FILENAME);
     if (fin.good())
     {
-        for (int i = 0; i < ARRAY_SIZE; i++) fin >> baseArray[i];
+        for (int i = 0; i < MAX_ARRAY_SIZE; i++)
+        {
+            fin >> array[i];
+        }
     }
+    else
+    {
+        cout << "Error reading array file!";
+        exit(1);
+    }
+
     fin.close();
 
-    ofstream fout(QSORT_FILENAME);
-    if (fout.good())
-    {
-        for (int m = MIN_M; m <= MAX_M; m++)
-        {
-            for (int i = 0; i < ARRAY_SIZE; i++) array[i] = baseArray[i];
-
-            auto startTime = steady_clock::now();
-            my_qsort<int>(array, array + ARRAY_SIZE, [](int a, int b) { return a < b; }, m);
-            auto endTime = steady_clock::now();
-
-            assert_sorted(array);
-            fout << m << ' ' << duration_cast<microseconds>(endTime - startTime).count() << '\n';
-        }
-
-        fout.close();
-    }
+    measure(array, [](int* begin, int* end) { my_isort<int>(begin, end, [](int a, int b) { return a < b; }); }, ISORT_FILENAME);
+    measure(array, [](int* begin, int* end) { my_qsort<int>(begin, end, [](int a, int b) { return a < b; }, false); }, QSORT_FILENAME);
 }
