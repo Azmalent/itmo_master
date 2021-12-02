@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+C:/Users/Coworking/source/repos/itmo_master/1/algorithms/lab4/dice.h
+random
+-
+stdexcept
+-
+
+C:/Users/Coworking/source/repos/itmo_master/1/algorithms/lab4/main.cpp
+dice.h
+C:/Users/Coworking/source/repos/itmo_master/1/algorithms/lab4/dice.h
+fstream
+-
+functional
+-
+iostream
+-
+
