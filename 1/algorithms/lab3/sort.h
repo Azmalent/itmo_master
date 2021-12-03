@@ -22,7 +22,11 @@ inline void swap(T* a, T* b)
     constexpr bool movable = std::is_move_constructible<T>::value;
 
     T temp = T(movable ? std::move_if_noexcept(*a) : *a);
+    a->~T();
+
     new(a) T(movable ? std::move_if_noexcept(*b) : *b);
+    b->~T();
+
     new(b) T(movable ? std::move_if_noexcept(temp) : temp);
 }
 

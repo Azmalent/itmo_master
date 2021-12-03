@@ -150,12 +150,12 @@ TEST_F(PersonSortTest, QuickSort)
 
 TEST_F(ArrayListTest, InsertionSort)
 {
-    my_isort(list.begin(), list.end() - 1);
-    assert_sorted(list.begin(), list.end() - 1);
+    my_isort(list.begin(), list.end());
+    assert_sorted(list.begin(), list.end());
 }
 
 TEST_F(ArrayListTest, QuickSort)
 {
-    my_qsort(list.begin(), list.end() - 1);
-    assert_sorted(list.begin(), list.end() - 1);
+    my_qsort(list.begin(), list.end());
+    assert_sorted(list.begin(), list.end());
 }

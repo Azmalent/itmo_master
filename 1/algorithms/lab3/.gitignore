@@ -1,5 +1,6 @@
-*.txt
+array.txt
+isort.txt
+qsort.txt
 cmake-build-debug
 .idea
 lab3
-tests

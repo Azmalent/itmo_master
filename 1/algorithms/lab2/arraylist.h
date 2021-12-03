@@ -32,8 +32,8 @@ public:
     ArrayList(int capacity = ARRAYLIST_DEFAULT_CAPACITY);
     ArrayList(const ArrayList<T>& list);
     ArrayList(ArrayList<T>&& list);
-	ArrayList<T>& operator=(const ArrayList<T>& that);
-	ArrayList<T>& operator=(ArrayList<T>&& that);
+    ArrayList<T>& operator=(const ArrayList<T>& that);
+    ArrayList<T>& operator=(ArrayList<T>&& that);
     ~ArrayList();
 
     int insert(const T& value);
@@ -44,8 +44,8 @@ public:
     const T& operator[](int index) const;
     T& operator[](int index);
 
-	T* begin();
-	T* end();
+    T* begin();
+    T* end();
 
     inline Iterator iterator();
     inline ConstIterator c_iterator() const;
@@ -228,7 +228,7 @@ T* ArrayList<T>::begin()
 template<typename T>
 T* ArrayList<T>::end()
 {
-	return array + size();
+	return array + size() - 1;
 }
 
 //Iterators
