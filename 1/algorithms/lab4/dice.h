@@ -1,6 +1,7 @@
 #ifndef DICE_H
 #define DICE_H
 
+#include "../lab2/arraylist.h"
 #include <random>
 #include <stdexcept>
 
@@ -31,6 +32,10 @@ public:
     int drop_lowest();
     int drop_highest();
 
+    static int roll_all(ArrayList<Dice>& dice);
+    static Dice parse(std::string str);
+    static ArrayList<Dice> parse_list(std::string str);
+
     std::string to_string() const;
 
     friend Dice operator*(int n, Dice dice);
@@ -38,7 +43,7 @@ public:
     friend Dice operator+(int n, Dice dice);
     friend Dice operator-(Dice dice, int n);
 
-    static Dice d4, d6, d8, d10, d12, d20;
+    static const Dice d4, d6, d8, d10, d12, d20;
 };
 
 Dice operator "" _d4(unsigned long long n);

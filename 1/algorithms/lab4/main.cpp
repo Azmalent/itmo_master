@@ -44,5 +44,10 @@ int main()
     get_distribution([]() { static Dice dice = 3_d6; return dice.lowest_of(2); }, "3d6, lower of 2 rolls");
     get_distribution([]() { static Dice dice = 3_d6; return dice.highest_of(2); }, "3d6, higher of 2 rolls");
 
+    get_distribution([]() {
+        static auto dice = Dice::parse_list("d6, 2d4 + 3, 2d8");
+        return Dice::roll_all(dice);
+    }, "d6, 2d4 + 3, 2d8");
+
     return 0;
 }
