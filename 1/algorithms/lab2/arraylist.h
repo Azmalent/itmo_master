@@ -15,7 +15,7 @@ class ArrayList final
     static_assert(std::is_destructible<T>::value, "ArrayList requires a destructor!");
 
 private:
-    static constexpr bool movable = std::is_move_constructible<T>::value;
+    static constexpr bool movable = std::is_nothrow_move_constructible<T>::value;
 
     int capacity;
     T* array;

@@ -19,7 +19,7 @@ T median(T& a, T& b, T& c, const std::function<bool(T&, T&)> compare) {
 template<typename T>
 inline void swap(T* a, T* b)
 {
-    constexpr bool movable = std::is_move_constructible<T>::value;
+    constexpr bool movable = std::is_nothrow_move_constructible<T>::value;
 
     T temp = T(movable ? std::move_if_noexcept(*a) : *a);
     a->~T();
@@ -35,13 +35,28 @@ void my_isort(T* begin, T* end, const std::function<bool(T&, T&)> compare = [](T
     static_assert(std::is_copy_constructible<T>::value, "Sorting requires a copy constructor!");
     if (end - begin < 2) return;
 
+    constexpr bool movable = std::is_nothrow_move_constructible<T>::value;
+
     for (T* p = begin + 1; p <= end; p++)
     {
-        T* cur = p;
-        while (cur > begin && compare(*cur, *(cur-1)))
+        if (compare(*p, *(p-1)))
         {
-            swap(cur-1, cur);
-            cur--;
+            T* cur = p;
+            T temp = T(movable ? std::move_if_noexcept(*cur) : *cur);
+            cur->~T();
+
+            do
+            {
+                T* prev = cur - 1;
+                new(cur) T(movable ? std::move_if_noexcept(*prev) : *prev);
+                prev->~T();
+
+                cur--;
+            }
+            while (cur > begin && compare(temp, *(cur-1)));
+
+            new(cur) T(movable ? std::move_if_noexcept(temp) : temp);
+            temp.~T();
         }
     }
 }
