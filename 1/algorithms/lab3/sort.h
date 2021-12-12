@@ -3,9 +3,7 @@
 
 #include <algorithm>
 #include <functional>
-#include <stack>
 #include <stdexcept>
-#include <utility>
 
 #define MIN_LENGTH_FOR_QSORT 20
 
@@ -56,7 +54,6 @@ void my_isort(T* begin, T* end, const std::function<bool(T&, T&)> compare = [](T
             while (cur > begin && compare(temp, *(cur-1)));
 
             new(cur) T(movable ? std::move_if_noexcept(temp) : temp);
-            temp.~T();
         }
     }
 }
