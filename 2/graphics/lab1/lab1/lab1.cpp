@@ -17,6 +17,9 @@
 
 class TriangleGame : public Game
 {
+private:
+	bool exitRequested = false;
+
 public:
 	TriangleGame(LPCWSTR gameName) : Game(gameName) 
 	{ 
@@ -53,6 +56,35 @@ public:
 		//Компонент меша
 		auto meshComponent = new MeshComponent(*this, mesh);
 		AddComponent(meshComponent);
+	}
+
+	void Init()
+	{
+		Input.KeyPressedEvent.AddLambda([this](const Key keycode) {
+			std::cout << "Key pressed: " << ToString(keycode) << std::endl;
+			if (keycode == Key::Esc)
+			{
+				this->exitRequested = true;
+				return 0;
+			}
+		});
+
+		Input.KeyReleasedEvent.AddLambda([](const Key keycode) {
+			std::cout << "Key released: " << ToString(keycode) << std::endl;
+		});
+
+		Input.MouseMoveEvent.AddLambda([this](const MouseMoveArgs& args) {
+			auto pos = args.Position;
+			auto vpos = this->Window.PixelToViewportPos(pos);
+			std::cout << "Mouse moved: (" << pos.x << ", " << pos.y << ")";
+			std::cout << " (" << vpos.x << ", " << vpos.y << ")" << std::endl;
+		});
+	}
+
+	void Update(float deltaTime)
+	{
+		Game::Update(deltaTime);
+		if (exitRequested) Window.Close(0);
 	}
 };
 

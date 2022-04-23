@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
@@ -140,6 +140,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="delegates.cpp" />
     <ClCompile Include="fpsCounterComponent.cpp" />
     <ClCompile Include="game.cpp" />
     <ClCompile Include="mesh.cpp" />
@@ -168,15 +169,30 @@
   <ItemGroup>
     <ClInclude Include="include\components\component.h" />
     <ClInclude Include="include\components\fpsCounter.h" />
+    <ClInclude Include="include\delegates.h" />
     <ClInclude Include="include\game.h" />
     <ClInclude Include="include\input.h" />
+    <ClInclude Include="include\keys.h" />
     <ClInclude Include="include\mesh.h" />
     <ClInclude Include="include\render.h" />
     <ClInclude Include="include\shader.h" />
     <ClInclude Include="include\components\mesh.h" />
     <ClInclude Include="include\window.h" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <Natvis Include="delegates.natvis" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
+    <Import Project="..\packages\directxtk_uwp.2022.3.24.2\build\native\directxtk_uwp.targets" Condition="Exists('..\packages\directxtk_uwp.2022.3.24.2\build\native\directxtk_uwp.targets')" />
   </ImportGroup>
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>Данный проект ссылается на пакеты NuGet, отсутствующие на этом компьютере. Используйте восстановление пакетов NuGet, чтобы скачать их.  Дополнительную информацию см. по адресу: http://go.microsoft.com/fwlink/?LinkID=322105. Отсутствует следующий файл: {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\directxtk_uwp.2022.3.24.2\build\native\directxtk_uwp.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\directxtk_uwp.2022.3.24.2\build\native\directxtk_uwp.targets'))" />
+  </Target>
 </Project>

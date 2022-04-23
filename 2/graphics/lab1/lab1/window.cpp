@@ -23,21 +23,31 @@ Window::Window(int width, int height, LPCWSTR applicationName, WNDPROC messageHa
 	RECT windowRect = { 0, 0, static_cast<LONG>(ClientWidth), static_cast<LONG>(ClientHeight) };
 	AdjustWindowRect(&windowRect, WS_OVERLAPPEDWINDOW, FALSE);
 
-	auto dwStyle = WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX | WS_THICKFRAME;
-
-	auto posX = (GetSystemMetrics(SM_CXSCREEN) - ClientWidth) / 2;
-	auto posY = (GetSystemMetrics(SM_CYSCREEN) - ClientHeight) / 2;
+	int posX = (GetSystemMetrics(SM_CXSCREEN) - ClientWidth) / 2;
+	int posY = (GetSystemMetrics(SM_CYSCREEN) - ClientHeight) / 2;
 
 	hWnd = CreateWindowEx(WS_EX_APPWINDOW, ApplicationName, ApplicationName,
-		dwStyle,
+		WS_SYSMENU | WS_CAPTION | WS_MINIMIZEBOX | WS_THICKFRAME,
 		posX, posY,
 		windowRect.right - windowRect.left,
 		windowRect.bottom - windowRect.top,
-		nullptr, nullptr, hInstance, nullptr);
+		nullptr, nullptr, hInstance, reinterpret_cast<LPVOID>(this));
+
+	SetWindowLongPtr(hWnd, GWLP_USERDATA, reinterpret_cast<LONG_PTR>(this));
 
 	ShowWindow(hWnd, SW_SHOW);
 	SetForegroundWindow(hWnd);
 	SetFocus(hWnd);
 
 	ShowCursor(true);
+}
+
+void Window::Close(int exitCode)
+{
+	PostQuitMessage(exitCode);
+}
+
+Vector2 Window::PixelToViewportPos(Vector2 pos)
+{
+	return pos / Vector2(ClientWidth, ClientHeight);
 }

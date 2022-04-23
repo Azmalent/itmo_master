@@ -27,5 +27,6 @@ public:
 	std::vector<GameComponent*>::iterator DeleteComponent(std::vector<GameComponent*>::iterator it);
 
 	Game(LPCWSTR gameName);
+	Game(LPCWSTR gameName, WNDPROC messageHandler);
 	void Run();
 };

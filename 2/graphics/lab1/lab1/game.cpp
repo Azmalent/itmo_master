@@ -5,17 +5,27 @@
 #include <directxmath.h>
 #include <iostream>
 
-LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
+static LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 {
+	Window* window = reinterpret_cast<Window*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
+
 	switch (umessage)
 	{
-		case WM_KEYDOWN:
+		case WM_SIZE:
 		{
-			unsigned int keycode = static_cast<unsigned int>(wparam);
-
-
-			if (keycode == 27) PostQuitMessage(0);
-			return 0;
+			if (window != nullptr)
+			{
+				window->ClientWidth = LOWORD(lparam);
+				window->ClientHeight = LOWORD(lparam);
+				return 0;
+			}
+		}
+		case WM_INPUT:
+		{
+			if (window != nullptr && window->Input != nullptr)
+			{
+				window->Input->OnInput(lparam);
+			}
 		}
 		default:
 		{
@@ -25,6 +35,11 @@ LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 }
 
 Game::Game(LPCWSTR gameName) : Window(800, 800, gameName, WndProc), Render(Window), Input(this)
+{
+
+}
+
+Game::Game(LPCWSTR gameName, WNDPROC messageHandler) : Window(800, 800, gameName, messageHandler), Render(Window), Input(this)
 {
 
 }
@@ -43,8 +58,8 @@ void Game::Run()
 	unsigned int frameCount = 0;
 
 	MSG msg = {};
-	bool isExitRequested = false;
-	while (!isExitRequested) 
+	bool exitRequested = false;
+	while (!exitRequested) 
 	{
 		while (PeekMessage(&msg, nullptr, 0, 0, PM_REMOVE)) 
 		{
@@ -54,7 +69,7 @@ void Game::Run()
 
 		if (msg.message == WM_QUIT) 
 		{
-			isExitRequested = true;
+			exitRequested = true;
 		}
 
 		auto curTime = std::chrono::steady_clock::now();
@@ -67,6 +82,7 @@ void Game::Run()
 		Draw();
 		Render.PostDraw(totalTime);
 	}
+
 }
 
 void Game::AddComponent(GameComponent* component)
