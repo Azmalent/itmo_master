@@ -1,5 +1,4 @@
-#include "include/game.h"
-#include "include/components/fpsCounter.h"
+#include "pch.h"
 
 #include <stdio.h>
 #include <Windows.h>

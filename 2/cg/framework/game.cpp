@@ -1,5 +1,4 @@
-#include "include/game.h"
-#include "include/shader.h"
+#include "pch.h"
 
 #include <d3dcompiler.h>
 #include <directxmath.h>

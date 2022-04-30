@@ -1,4 +1,4 @@
-#include "include/window.h"
+#include "pch.h"
 
 Window::Window(int width, int height, LPCWSTR applicationName, WNDPROC messageHandler) 
 	: ClientWidth(width), ClientHeight(height), ApplicationName(applicationName), hWnd(nullptr)

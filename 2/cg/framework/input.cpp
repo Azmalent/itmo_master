@@ -1,5 +1,4 @@
-#include "include/input.h"
-#include "include/game.h"
+#include "pch.h"
 
 #include <iostream>
 

@@ -1,4 +1,4 @@
-#include "include/mesh.h"
+#include "pch.h"
 
 Mesh::Mesh(Game& game, VertexShader* vertexShader, PixelShader* pixelShader, DirectX::XMFLOAT4* points, int pointsSize, int* indexes, int indexesSize)
 	: vertexShader(vertexShader), pixelShader(pixelShader), 

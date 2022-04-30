@@ -1,8 +1,8 @@
 ﻿// lab1.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
 //
-#include "include/game.h"
-#include "include/components/fpsCounter.h"
-#include "include/components/mesh.h"
+#include <game.h>
+#include <components/fpsCounter.h>
+#include <components/mesh.h>
 
 #include <directxmath.h>
 #include <iostream>

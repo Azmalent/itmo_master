@@ -1,4 +1,4 @@
-#include "include/components/mesh.h"
+#include "pch.h"
 
 #include <wrl.h>
 
