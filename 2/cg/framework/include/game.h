@@ -1,6 +1,6 @@
 #pragma once
 
-#include "components/component.h"
+#include "component.h"
 #include "input.h"
 #include "render.h"
 

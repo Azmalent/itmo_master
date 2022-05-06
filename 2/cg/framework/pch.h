@@ -8,9 +8,10 @@
 #define PCH_H
 
 // Добавьте сюда заголовочные файлы для предварительной компиляции
-#include "include/components/component.h"
 #include "include/components/fpsCounter.h"
 #include "include/components/mesh.h"
+#include "include/components/object.h"
+#include "include/component.h"
 #include "include/delegates.h"
 #include "include/game.h"
 #include "include/input.h"

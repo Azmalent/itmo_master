@@ -4,15 +4,16 @@
 #include "shader.h"
 
 #include <DirectXMath.h>
+#include <memory.h>
 
 struct Mesh
 {
-	VertexShader* vertexShader;
-	PixelShader* pixelShader;
-	ID3D11InputLayout* layout;
+	std::unique_ptr<VertexShader> vertexShader;
+	std::unique_ptr<PixelShader> pixelShader;
+	ComPtr<ID3D11InputLayout> layout;
 
-	ID3D11Buffer* indexBuffer;
-	ID3D11Buffer* vertexBuffer;
+	ComPtr<ID3D11Buffer> indexBuffer;
+	ComPtr<ID3D11Buffer> vertexBuffer;
 
 	DirectX::XMFLOAT4* points;
 	int pointsSize;
@@ -24,5 +25,5 @@ struct Mesh
 	UINT offsets[1] = { 0 };
 
 	Mesh(Game& game, VertexShader* vertexShader, PixelShader* pixelShader, DirectX::XMFLOAT4* points, int pointsSize, int* indexes, int indexesSize);
-	~Mesh();
+	~Mesh() = default;
 };

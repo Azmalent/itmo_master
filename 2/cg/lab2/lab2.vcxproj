@@ -140,7 +140,10 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="controller.cpp" />
+    <ClCompile Include="ball.cpp" />
     <ClCompile Include="lab2.cpp" />
+    <ClCompile Include="paddle.cpp" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
@@ -149,6 +152,11 @@
     <ProjectReference Include="..\framework\framework.vcxproj">
       <Project>{1520c5e5-b6c0-4f28-8d5e-a6a7b35a0bf4}</Project>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\ball.h" />
+    <ClInclude Include="include\controller.h" />
+    <ClInclude Include="include\paddle.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

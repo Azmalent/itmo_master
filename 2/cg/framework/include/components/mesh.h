@@ -1,16 +1,16 @@
 #pragma once
 
-#include "component.h"
+#include "../component.h"
 #include "../mesh.h"
 
 class MeshComponent : public GameComponent
 {
 private:
-	Mesh* mesh;
+	std::unique_ptr<Mesh> mesh;
 
 public:
 	MeshComponent(Game& game, Mesh* mesh);
-	~MeshComponent();
+	~MeshComponent() = default;
 
 	void Draw();
 };

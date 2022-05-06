@@ -29,9 +29,7 @@ public:
 
 		//Инициализация шейдеров
 		auto vertexShader = new VertexShader(*this, L"shaders/vertexShader.hlsl", nullptr, nullptr);
-
-		D3D_SHADER_MACRO pixelMacros[] = { "TEST", "1", "TCOLOR", "float4(0.0f, 1.0f, 0.0f, 1.0f)", nullptr, nullptr };
-		auto pixelShader = new PixelShader(*this, L"shaders/pixelShader.hlsl", pixelMacros, nullptr);
+		auto pixelShader = new PixelShader(*this, L"shaders/pixelShader.hlsl", nullptr, nullptr);
 
 		//Меш
 		DirectX::XMFLOAT4 points[] = {

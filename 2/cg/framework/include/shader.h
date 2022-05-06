@@ -3,6 +3,9 @@
 #include "game.h"
 
 #include <d3dcompiler.h>
+#include <wrl.h>
+
+using namespace Microsoft::WRL;
 
 struct ShaderBase
 {
@@ -11,19 +14,19 @@ protected:
 	Game& game;
 
 public:
-	ID3DBlob* byteCode;
+	ComPtr<ID3DBlob> byteCode;
 };
 
 struct VertexShader : public ShaderBase
 {
 public:
 	VertexShader(Game& game, LPCWSTR filename, const D3D_SHADER_MACRO* macros, ID3DInclude* include);
-	ID3D11VertexShader* shader;
+	ComPtr<ID3D11VertexShader> shader;
 };
 
 struct PixelShader : public ShaderBase
 {
 public:
 	PixelShader(Game& game, LPCWSTR filename, const D3D_SHADER_MACRO* macros, ID3DInclude* include);
-	ID3D11PixelShader* shader;
+	ComPtr<ID3D11PixelShader> shader;
 };

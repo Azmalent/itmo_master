@@ -32,7 +32,7 @@ Mesh::Mesh(Game& game, VertexShader* vertexShader, PixelShader* pixelShader, Dir
 		std::size(inputElements),
 		vertexShader->byteCode->GetBufferPointer(),
 		vertexShader->byteCode->GetBufferSize(),
-		&layout
+		layout.GetAddressOf()
 	);
 
 	D3D11_BUFFER_DESC vertexBufDesc = {
@@ -50,7 +50,7 @@ Mesh::Mesh(Game& game, VertexShader* vertexShader, PixelShader* pixelShader, Dir
 		.SysMemSlicePitch = 0
 	};
 
-	game.Render.Device->CreateBuffer(&vertexBufDesc, &vertexData, &vertexBuffer);
+	game.Render.Device->CreateBuffer(&vertexBufDesc, &vertexData, vertexBuffer.GetAddressOf());
 
 	//Index buffer
 	D3D11_BUFFER_DESC indexBufDesc = {
@@ -68,11 +68,5 @@ Mesh::Mesh(Game& game, VertexShader* vertexShader, PixelShader* pixelShader, Dir
 		.SysMemSlicePitch = 0
 	};
 
-	game.Render.Device->CreateBuffer(&indexBufDesc, &indexData, &indexBuffer);
-}
-
-Mesh::~Mesh()
-{
-	delete pixelShader;
-	delete vertexShader;
+	game.Render.Device->CreateBuffer(&indexBufDesc, &indexData, indexBuffer.GetAddressOf());
 }

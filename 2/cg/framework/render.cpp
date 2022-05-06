@@ -31,10 +31,10 @@ RenderDevice::RenderDevice(Window& window) : Context(nullptr), rastState(nullptr
 		1,
 		D3D11_SDK_VERSION,
 		&swapDesc,
-		&swapChain,
-		&Device,
+		swapChain.GetAddressOf(),
+		Device.GetAddressOf(),
 		nullptr,
-		&Context
+		Context.GetAddressOf()
 	);
 
 	if (FAILED(res))
@@ -44,14 +44,14 @@ RenderDevice::RenderDevice(Window& window) : Context(nullptr), rastState(nullptr
 		return;
 	}
 
-	swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**)&backBuffer);
-	Device->CreateRenderTargetView(backBuffer, nullptr, &renderView);
+	swapChain->GetBuffer(0, __uuidof(ID3D11Texture2D), (void**) backBuffer.GetAddressOf());
+	Device->CreateRenderTargetView(backBuffer.Get(), nullptr, renderView.GetAddressOf());
 
 	CD3D11_RASTERIZER_DESC rastDesc = {};
 	rastDesc.CullMode = D3D11_CULL_NONE;
 	rastDesc.FillMode = D3D11_FILL_SOLID; // wireframe или solid
 
-	Device->CreateRasterizerState(&rastDesc, &rastState);
+	Device->CreateRasterizerState(&rastDesc, rastState.GetAddressOf());
 
 	viewport = {};
 	viewport.Width = window.ClientWidth;
@@ -62,13 +62,20 @@ RenderDevice::RenderDevice(Window& window) : Context(nullptr), rastState(nullptr
 	viewport.MaxDepth = 1.0f;
 }
 
+void RenderDevice::SetClearColor(float r, float g, float b)
+{
+	clearColor[0] = r;
+	clearColor[1] = g;
+	clearColor[2] = b;
+}
+
 void RenderDevice::PreDraw()
 {
 	Context->ClearState();
-	Context->RSSetState(rastState);
+	Context->RSSetState(rastState.Get());
 	Context->RSSetViewports(1, &viewport);
-	Context->OMSetRenderTargets(1, &renderView, nullptr);
-	Context->ClearRenderTargetView(renderView, clearColor);
+	Context->OMSetRenderTargets(1, renderView.GetAddressOf(), nullptr);
+	Context->ClearRenderTargetView(renderView.Get(), clearColor);
 }
 
 void RenderDevice::PostDraw(float totalTime)

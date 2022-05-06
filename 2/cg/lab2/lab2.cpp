@@ -4,6 +4,9 @@
 #include <game.h>
 #include <iostream>
 
+#include "include/ball.h"
+#include "include/paddle.h"
+
 #pragma comment(lib, "d3d11.lib")
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3dcompiler.lib")
@@ -11,8 +14,39 @@
 
 class PongGame : public Game
 {
+private:
+	bool exitRequested = false;
+
 public:
-	PongGame(LPCWSTR gameName) : Game(gameName) { }
+	PongGame(LPCWSTR gameName) : Game(gameName) 
+	{ 
+		Render.SetClearColor(0, 0, 0);
+
+		auto ball = BallComponent(*this);
+
+		auto playerPaddle = PaddleComponent(*this, ball);
+		playerPaddle.SetController(new PlayerController(*this, playerPaddle));
+
+		auto aiPaddle = PaddleComponent(*this, ball);
+		aiPaddle.SetController(new AIController(*this, aiPaddle, ball));
+	}
+
+	virtual void Init()
+	{
+		Input.KeyPressedEvent.AddLambda([this](const Key keycode) {
+			if (keycode == Key::Esc)
+			{
+				this->exitRequested = true;
+				return 0;
+			}
+		});
+	}
+
+	void Update(float deltaTime)
+	{
+		Game::Update(deltaTime);
+		if (exitRequested) Window.Close(0);
+	}
 };
 
 int main()
