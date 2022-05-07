@@ -18,7 +18,10 @@ void MeshComponent::Draw()
 	context->IASetVertexBuffers(0, 1, mesh->vertexBuffer.GetAddressOf(), mesh->strides, mesh->offsets);
 
 	context->PSSetShader(mesh->pixelShader->shader.Get(), nullptr, 0);
+	context->PSSetConstantBuffers(0, 1, mesh->pixelShader->constBuffer.GetAddressOf());
+
 	context->VSSetShader(mesh->vertexShader->shader.Get(), nullptr, 0);
+	context->VSSetConstantBuffers(0, 1, mesh->vertexShader->constBuffer.GetAddressOf());
 
 	context->DrawIndexed(mesh->indexesSize, 0, 0);
 }

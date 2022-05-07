@@ -71,9 +71,6 @@
     <ClCompile Include="input.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="mesh.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="meshComponent.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -87,6 +84,9 @@
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="object.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="mesh.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>

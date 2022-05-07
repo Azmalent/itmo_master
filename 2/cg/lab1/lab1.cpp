@@ -28,8 +28,8 @@ public:
 		AddComponent(fpsCounter);
 
 		//Инициализация шейдеров
-		auto vertexShader = new VertexShader(*this, L"shaders/vertexShader.hlsl", nullptr, nullptr);
-		auto pixelShader = new PixelShader(*this, L"shaders/pixelShader.hlsl", nullptr, nullptr);
+		auto vertexShader = new VertexShader(*this, L"shaders/vertexShader.hlsl", nullptr, nullptr, {}, 1);
+		auto pixelShader = new PixelShader(*this, L"shaders/pixelShader.hlsl", nullptr, nullptr, {}, 1);
 
 		//Меш
 		DirectX::XMFLOAT4 points[] = {
