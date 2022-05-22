@@ -51,3 +51,8 @@ Vector2 Window::PixelToViewportPos(Vector2 pos)
 {
 	return pos / Vector2(ClientWidth, ClientHeight);
 }
+
+float Window::GetAspectRatio()
+{
+	return static_cast<float>(ClientWidth) / ClientHeight;
+}

@@ -87,8 +87,8 @@ protected:
 	void OnMouseMove(RawMouseArgs args);
 
 public:
-	DirectX::SimpleMath::Vector2 MousePosition;
-	DirectX::SimpleMath::Vector2 MouseOffset;
+	Vector2 MousePosition;
+	Vector2 MouseOffset;
 	int MouseWheelDelta = 0;
 
 	MulticastDelegate<const Key> KeyPressedEvent;

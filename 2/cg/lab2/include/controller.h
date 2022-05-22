@@ -10,19 +10,16 @@ class PaddleComponent;
 class AbstractController : public GameComponent
 {
 protected:
-	PaddleComponent& paddle;
-	AbstractController(Game& game, PaddleComponent& paddle);
+	AbstractController(Game& game);
 
 public:
 	virtual void Update(float deltaTime) = 0;
 };
 
-
-
 class PlayerController : public AbstractController
 {
 public:
-	PlayerController(Game& game, PaddleComponent& paddle);
+	PlayerController(Game& game);
 	virtual void Update(float deltaTime);
 };
 
@@ -34,6 +31,6 @@ private:
 	BallComponent& ball;
 
 public:
-	AIController(Game& game, PaddleComponent& paddle, BallComponent& ball);
+	AIController(Game& game, BallComponent& ball);
 	virtual void Update(float deltaTime);
 };

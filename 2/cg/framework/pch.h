@@ -7,10 +7,16 @@
 #ifndef PCH_H
 #define PCH_H
 
+#ifndef WIN32_LEAN_AND_MEAN
+#define WIN32_LEAN_AND_MEAN    // Exclude rarely-used stuff from Windows headers.
+#endif
+
 // Добавьте сюда заголовочные файлы для предварительной компиляции
+#include "include/components/collider.h"
 #include "include/components/fpsCounter.h"
 #include "include/components/mesh.h"
-#include "include/components/object.h"
+#include "include/components/positioned.h"
+#include "include/camera.h"
 #include "include/component.h"
 #include "include/delegates.h"
 #include "include/game.h"
@@ -19,6 +25,8 @@
 #include "include/mesh.h"
 #include "include/render.h"
 #include "include/shader.h"
+#include "include/transform.h"
+#include "include/utils.h"
 #include "include/window.h"
 
 #endif //PCH_H

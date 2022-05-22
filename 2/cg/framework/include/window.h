@@ -23,4 +23,5 @@ public:
 	void Close(int exitCode);
 
 	Vector2 PixelToViewportPos(Vector2 pos);
+	float GetAspectRatio();
 };

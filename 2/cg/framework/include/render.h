@@ -4,8 +4,11 @@
 
 #include <d3d.h>
 #include <d3d11.h>
+#include <SimpleMath.h>
 #include <wrl.h>
 
+using namespace DirectX;
+using namespace DirectX::SimpleMath;
 using namespace Microsoft::WRL;
 
 class RenderDevice
@@ -18,6 +21,7 @@ private:
 	ComPtr<IDXGISwapChain> swapChain;
 	ComPtr<ID3D11RasterizerState> rastState;
 	D3D11_VIEWPORT viewport;
+	Window& window;
 
 public:
 	ComPtr<ID3D11Device> Device;

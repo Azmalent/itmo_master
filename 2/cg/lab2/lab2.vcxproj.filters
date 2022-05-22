@@ -29,9 +29,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
     <ClInclude Include="include\paddle.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
@@ -41,5 +38,12 @@
     <ClInclude Include="include\ball.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <FxCompile Include="shaders\vertexShader.hlsl" />
+    <FxCompile Include="shaders\pixelShader.hlsl" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

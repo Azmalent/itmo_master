@@ -1,26 +1,27 @@
 #pragma once
 
 #include <components/mesh.h>
-#include <components/object.h>
+#include <components/positioned.h>
 
 #include "ball.h"
 #include "controller.h"
 
-class PaddleComponent : public GameObject
+class PaddleComponent : public PositionedComponent
 {
 private:
-	int speed = 0;
-	//MeshComponent mesh;
-	AbstractController* controller;
+	struct ConstBuffer {
+		XMFLOAT4X4 wvpMatrix;
+	};
+
+	float speed = 0;
 	BallComponent& ball;
+
+	ConstBuffer constBuffer;
 
 public:
 	PaddleComponent(Game& game, BallComponent& ball);
 	~PaddleComponent() = default;
 
 	virtual void Update(float deltaTime);
-	virtual void Draw();
-
-	void SetController(AbstractController* controller);
-	void SetSpeed(int speed);
+	void SetSpeed(float speed);
 };

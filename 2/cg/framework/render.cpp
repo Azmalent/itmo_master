@@ -2,7 +2,7 @@
 
 #include <iostream>
 
-RenderDevice::RenderDevice(Window& window) : Context(nullptr), rastState(nullptr), renderView(nullptr)
+RenderDevice::RenderDevice(Window& window) : window(window), Context(nullptr), rastState(nullptr), renderView(nullptr)
 {
 	DXGI_SWAP_CHAIN_DESC swapDesc = {};
 	swapDesc.BufferCount = 2;

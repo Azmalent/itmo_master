@@ -1,7 +1,6 @@
 #pragma once
 
 #include "game.h"
-#include "components/object.h"
 
 #include <DirectXMath.h>
 #include <d3dcompiler.h>
@@ -13,42 +12,30 @@ using namespace Microsoft::WRL;
 struct ShaderBase
 {
 protected:
-	ShaderBase(Game& game, LPCWSTR filename, LPCSTR target, const D3D_SHADER_MACRO* macros, ID3DInclude* include, void* constBuf, UINT constBufSize);
+	ShaderBase(Game& game, LPCWSTR filename, LPCSTR target, const D3D_SHADER_MACRO* macros, ID3DInclude* include);
 	Game& game;
+
+	void* constBufferData = nullptr;
+	UINT constBufferSize = 0;
 
 public:
 	ComPtr<ID3DBlob> byteCode;
 	ComPtr<ID3D11Buffer> constBuffer;
-};
 
-struct BaseVertexConstBuffer
-{
-	XMFLOAT4X4 WorldViewProjection;
-	float Time;
-
-	BaseVertexConstBuffer(Transform transform, float time)
-	{
-		WorldViewProjection = transform.GetWorldViewProjection();
-		Time = time;
-	}
+	void SetConstBuffer(void* data, UINT size);
+	void UpdateConstBuffer(ComPtr<ID3D11DeviceContext> context);
 };
 
 struct VertexShader : public ShaderBase
 {
 public:
-	VertexShader(Game& game, LPCWSTR filename, const D3D_SHADER_MACRO* macros, ID3DInclude* include, void* constBuf, UINT constBufSize);
+	VertexShader(Game& game, LPCWSTR filename, const D3D_SHADER_MACRO* macros, ID3DInclude* include);
 	ComPtr<ID3D11VertexShader> shader;
-};
-
-struct BasePixelConstBuffer
-{
-	float Time;
-	BasePixelConstBuffer(float time) : Time(time) { }
 };
 
 struct PixelShader : public ShaderBase
 {
 public:
-	PixelShader(Game& game, LPCWSTR filename, const D3D_SHADER_MACRO* macros, ID3DInclude* include, void* constBuf, UINT constBufSize);
+	PixelShader(Game& game, LPCWSTR filename, const D3D_SHADER_MACRO* macros, ID3DInclude* include);
 	ComPtr<ID3D11PixelShader> shader;
 };

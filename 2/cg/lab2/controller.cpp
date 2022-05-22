@@ -1,36 +1,46 @@
 #include <game.h>
 #include <keys.h>
+#include <utils.h>
 
 #include "include/paddle.h"
 
-AbstractController::AbstractController(Game& game, PaddleComponent& paddle) : GameComponent(game), paddle(paddle)
+AbstractController::AbstractController(Game& game) : GameComponent(game)
 {
 
 }
 
-PlayerController::PlayerController(Game& game, PaddleComponent& paddle) : AbstractController(game, paddle)
+PlayerController::PlayerController(Game& game) : AbstractController(game)
 {
 
 }
 
 void PlayerController::Update(float deltaTime)
 {
-	if (game.Input.IsKeyDown(Key::Up))
+	auto paddle = static_cast<PaddleComponent*>(parent);
+
+	int speed = 0;
+	if (game.Input.IsKeyDown(Key::Up)) speed = 1;
+	else if (game.Input.IsKeyDown(Key::Down)) speed = -1;
+
+	if (speed != 0)
 	{
-		paddle.SetSpeed(-100);
-	}
-	else if (game.Input.IsKeyDown(Key::Down))
-	{
-		paddle.SetSpeed(100);
+		float y = std::clamp(paddle->transform.position.y + deltaTime * speed, -0.75f, 0.75f);
+		paddle->transform.position.y = y;
 	}
 }
 
-AIController::AIController(Game& game, PaddleComponent& paddle, BallComponent& ball) : AbstractController(game, paddle), ball(ball)
+AIController::AIController(Game& game, BallComponent& ball) : AbstractController(game), ball(ball)
 {
 
 }
 
 void AIController::Update(float deltaTime)
 {
-	//todo
+	auto paddle = static_cast<PaddleComponent*>(parent);
+
+	float currentY = paddle->transform.position.y;
+	float targetY = ball.transform.position.y;
+	
+	float newY = std::clamp(utils::move_towards(currentY, targetY, deltaTime / 2), -0.75f, 0.75f);
+	paddle->transform.position.y = newY;
 }

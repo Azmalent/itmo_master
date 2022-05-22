@@ -33,12 +33,12 @@ static LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM 
 	}
 }
 
-Game::Game(LPCWSTR gameName) : Window(800, 800, gameName, WndProc), Render(Window), Input(this)
+Game::Game(LPCWSTR gameName) : Window(800, 800, gameName, WndProc), Camera(Window), Render(Window), Input(this)
 {
 
 }
 
-Game::Game(LPCWSTR gameName, WNDPROC messageHandler) : Window(800, 800, gameName, messageHandler), Render(Window), Input(this)
+Game::Game(LPCWSTR gameName, WNDPROC messageHandler) : Window(800, 800, gameName, messageHandler), Camera(Window), Render(Window), Input(this)
 {
 
 }
@@ -82,12 +82,14 @@ void Game::Run()
 		Render.PostDraw(totalTime);
 	}
 
+	Destroy();
 }
 
 void Game::AddComponent(GameComponent* component)
 {
 	components.insert(components.end(), component);
 	component->Init();
+	component->InitChildren();
 }
 
 std::vector<GameComponent*>::iterator Game::DeleteComponent(std::vector<GameComponent*>::iterator it)
@@ -96,9 +98,19 @@ std::vector<GameComponent*>::iterator Game::DeleteComponent(std::vector<GameComp
 	auto next = this->components.erase(it);
 
 	current->Destroy();
+	current->DestroyChildren();
 	delete current;
 
 	return next;
+}
+
+void Game::DeleteComponent(GameComponent* component)
+{
+	utils::remove_by_value(components, component);
+
+	component->Destroy();
+	component->DestroyChildren();
+	delete component;
 }
 
 void Game::Update(float deltaTime)
@@ -106,6 +118,18 @@ void Game::Update(float deltaTime)
 	for (auto component : components) 
 	{
 		component->Update(deltaTime);
+		component->UpdateChildren(deltaTime);
+	}
+
+	if (boxColliders.size() > 1)
+	{
+		for (auto a = std::begin(boxColliders); a != std::end(boxColliders) - 1; a++)
+		{
+			for (auto b = a + 1; b != std::end(boxColliders); b++)
+			{
+				(*a)->CheckCollision(*b);
+			}
+		}
 	}
 }
 
@@ -114,5 +138,15 @@ void Game::Draw()
 	for (auto component : components) 
 	{
 		component->Draw();
+		component->DrawChildren();
+	}
+}
+
+void Game::Destroy()
+{
+	auto it = components.begin();
+	while (it != components.end())
+	{
+		it = DeleteComponent(it);
 	}
 }
