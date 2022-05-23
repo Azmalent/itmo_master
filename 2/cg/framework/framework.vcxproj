@@ -157,7 +157,7 @@
     <ClInclude Include="include\components\collider.h" />
     <ClInclude Include="include\components\fpsCounter.h" />
     <ClInclude Include="include\components\mesh.h" />
-    <ClInclude Include="include\components\positioned.h" />
+    <ClInclude Include="include\components\scene.h" />
     <ClInclude Include="include\delegates.h" />
     <ClInclude Include="include\game.h" />
     <ClInclude Include="include\input.h" />
@@ -187,7 +187,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|x64'">Create</PrecompiledHeader>
     </ClCompile>
-    <ClCompile Include="positionedComponent.cpp" />
+    <ClCompile Include="sceneComponent.cpp" />
     <ClCompile Include="render.cpp" />
     <ClCompile Include="shader.cpp" />
     <ClCompile Include="transform.cpp" />

@@ -1,12 +1,12 @@
 #pragma once
 
 #include <components/mesh.h>
-#include <components/positioned.h>
+#include <components/scene.h>
 
 #include "ball.h"
 #include "controller.h"
 
-class PaddleComponent : public PositionedComponent
+class PaddleComponent : public SceneComponent
 {
 private:
 	struct ConstBuffer {

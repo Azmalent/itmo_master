@@ -1,16 +1,16 @@
 #include "pch.h"
 
-PositionedComponent::PositionedComponent(Game& game) : GameComponent(game)
+SceneComponent::SceneComponent(Game& game) : GameComponent(game)
 {
 
 }
 
-Transform* PositionedComponent::GetTransform()
+Transform* SceneComponent::GetTransform()
 {
 	return &transform;
 }
 
-void PositionedComponent::SetParent(GameComponent* parent)
+void SceneComponent::SetParent(GameComponent* parent)
 {
 	if (parent != nullptr && CanBeChildOf(parent))
 	{

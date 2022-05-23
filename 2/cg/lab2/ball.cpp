@@ -9,10 +9,11 @@
 
 static const float R = 0.025;
 
-static const float MIN_SPEED = 0.33;
-static const float MAX_SPEED = 1;
+static const float MIN_SPEED = 0.5;
+static const float SPEED_STEP = 0.1;
+static const float MAX_SPEED = 1.5;
 
-BallComponent::BallComponent(Game& game) : PositionedComponent(game)
+BallComponent::BallComponent(Game& game) : SceneComponent(game)
 {
 	auto vertexShader = new VertexShader(game, L"shaders/vertexShader.hlsl", nullptr, nullptr);
 	vertexShader->SetConstBuffer(&constBuffer, sizeof(BallComponent::ConstBuffer));
@@ -41,7 +42,7 @@ BallComponent::BallComponent(Game& game) : PositionedComponent(game)
 	AddChild(new MeshComponent(game, mesh));
 	AddChild(new BoxColliderComponent(game, Vector3(R, R, 0.5f)));
 
-	CollisionStartEvent.AddLambda([this](PositionedComponent* other) {
+	CollisionStartEvent.AddLambda([this](SceneComponent* other) {
 		auto paddle = dynamic_cast<PaddleComponent*>(other);
 		if (paddle != nullptr)
 		{
@@ -50,6 +51,8 @@ BallComponent::BallComponent(Game& game) : PositionedComponent(game)
 
 			direction = (Vector2(-direction.x, direction.y) + Vector2(d.x, d.y)) / 2;
 			direction.Normalize();
+
+			if (speed < MAX_SPEED) speed += SPEED_STEP;
 		}
 	});
 
@@ -64,12 +67,6 @@ void BallComponent::Update(float deltaTime)
 
 	if (y > 1 || y < -1) direction.y *= -1;
 	transform.SetPosition(x, std::clamp(y, -1.0f, 1.0f), 0.5f);
-
-	if (timeUntilMaxSpeed > 0)
-	{
-		speed = std::lerp(MAX_SPEED, MIN_SPEED, timeUntilMaxSpeed);
-		timeUntilMaxSpeed = max(0, timeUntilMaxSpeed - deltaTime);
-	}
 
 	constBuffer.wvpMatrix = game.Camera.GetWorldViewProjectionMatrix(transform);
 }
@@ -89,5 +86,4 @@ void BallComponent::ResetPosition()
 	transform.SetPosition(0, 0, 0.5f);
 	
 	speed = MIN_SPEED;
-	timeUntilMaxSpeed = 1;
 }

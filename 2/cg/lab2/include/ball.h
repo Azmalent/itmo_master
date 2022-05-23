@@ -1,13 +1,13 @@
 #pragma once
 
-#include <components/positioned.h>
+#include <components/scene.h>
 
 #include <d3d11.h>
 #include <SimpleMath.h>
 
 using namespace DirectX::SimpleMath;
 
-class BallComponent : public PositionedComponent
+class BallComponent : public SceneComponent
 {
 private:
 	struct ConstBuffer {
@@ -16,7 +16,6 @@ private:
 
 	Vector2 direction;
 	float speed;
-	float timeUntilMaxSpeed;
 
 	ConstBuffer constBuffer;
 

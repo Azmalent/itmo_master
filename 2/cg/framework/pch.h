@@ -15,7 +15,7 @@
 #include "include/components/collider.h"
 #include "include/components/fpsCounter.h"
 #include "include/components/mesh.h"
-#include "include/components/positioned.h"
+#include "include/components/scene.h"
 #include "include/camera.h"
 #include "include/component.h"
 #include "include/delegates.h"

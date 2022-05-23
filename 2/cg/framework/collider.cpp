@@ -38,8 +38,8 @@ bool BoxColliderComponent::Intersects(BoxColliderComponent* other)
 
 void BoxColliderComponent::CheckCollision(BoxColliderComponent* other)
 {
-	auto parent = dynamic_cast<PositionedComponent*>(this->parent);
-	auto otherParent = dynamic_cast<PositionedComponent*>(other->parent);
+	auto parent = dynamic_cast<SceneComponent*>(this->parent);
+	auto otherParent = dynamic_cast<SceneComponent*>(other->parent);
 
 	if (parent != nullptr && otherParent != nullptr)
 	{

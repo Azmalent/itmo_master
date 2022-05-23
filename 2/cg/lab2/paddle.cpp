@@ -6,7 +6,7 @@
 static const float halfWidth = 0.025f;
 static const float halfHeight = 0.25f;
 
-PaddleComponent::PaddleComponent(Game& game, BallComponent& ball) : PositionedComponent(game), ball(ball)
+PaddleComponent::PaddleComponent(Game& game, BallComponent& ball) : SceneComponent(game), ball(ball)
 {
 	auto vertexShader = new VertexShader(game, L"shaders/vertexShader.hlsl", nullptr, nullptr);
 	vertexShader->SetConstBuffer(&constBuffer, sizeof(PaddleComponent::ConstBuffer));
