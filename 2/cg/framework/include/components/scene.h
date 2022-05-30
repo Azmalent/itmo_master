@@ -15,5 +15,5 @@ public:
 	SceneComponent(Game& game);
 
 	Transform* GetTransform();
-	void SetParent(GameComponent* parent);
+	void SetParent(GameComponent* parent, bool initial = false);
 };

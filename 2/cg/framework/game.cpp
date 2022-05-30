@@ -85,13 +85,6 @@ void Game::Run()
 	Destroy();
 }
 
-void Game::AddComponent(GameComponent* component)
-{
-	components.insert(components.end(), component);
-	component->Init();
-	component->InitChildren();
-}
-
 std::vector<GameComponent*>::iterator Game::DeleteComponent(std::vector<GameComponent*>::iterator it)
 {
 	GameComponent* current = *it;

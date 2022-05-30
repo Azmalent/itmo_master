@@ -33,5 +33,5 @@ void MeshComponent::Draw()
 		mesh->vertexShader->UpdateConstBuffer(game.Render.Context);
 	}
 
-	context->DrawIndexed(mesh->indexesSize, 0, 0);
+	context->DrawIndexed(mesh->indexes.size(), 0, 0);
 }

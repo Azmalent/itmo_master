@@ -48,12 +48,6 @@ void GameComponent::DestroyChildren()
 	}
 }
 
-void GameComponent::AddChild(GameComponent* child)
-{
-	children.insert(children.end(), child);
-	child->SetParent(this);
-}
-
 Transform* GameComponent::GetTransform()
 {
 	return nullptr;
@@ -64,7 +58,7 @@ GameComponent* GameComponent::GetParent()
 	return parent;
 }
 
-void GameComponent::SetParent(GameComponent* parent)
+void GameComponent::SetParent(GameComponent* parent, bool initial)
 {
 	if (CanBeChildOf(parent))
 	{

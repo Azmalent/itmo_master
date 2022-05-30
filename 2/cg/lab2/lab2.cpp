@@ -1,6 +1,7 @@
 ﻿// lab2.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
 //
 
+#include <colors.h>
 #include <game.h>
 #include <iostream>
 
@@ -26,7 +27,7 @@ private:
 public:
 	PongGame(LPCWSTR gameName) : Game(gameName) 
 	{
-		Render.SetClearColor(0, 0, 0);
+		Render.SetClearColor(Colors::Black);
 
 		//Счётчик FPS
 		auto fpsCounter = new FpsCounterComponent(*this);

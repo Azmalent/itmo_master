@@ -15,8 +15,10 @@ struct Camera
 	friend class Window;
 
 	XMFLOAT3 Position = { 0, 0, -4 };
-	XMFLOAT3 Target = { 0, 0, 0 };
-	XMFLOAT3 UpVector = { 0, 1, 0 };
+
+	XMFLOAT3 Look = { 0, 0, 1 };
+	XMFLOAT3 Up = { 0, 1, 0 };
+	XMFLOAT3 Right = { 1, 0, 0 };
 
 	XMMATRIX ViewMatrix;
 	XMMATRIX ProjectionMatrix;
@@ -24,18 +26,25 @@ struct Camera
 	void SetPosition(float x, float y, float z);
 	void SetPosition(Vector3 pos);
 	
-	void SetTarget(float x, float y, float z);
-	void SetTarget(Vector3 target);
+	void SetLook(float x, float y, float z);
+	void SetLook(Vector3 target);
 
-	void SetUpVector(float x, float y, float z);
-	void SetUpVector(Vector3 up);
+	void SetUp(float x, float y, float z);
+	void SetUp(Vector3 up);
+
+	void LookAt(Vector3 target, Vector3 worldUp = { 0, 1, 0 });
+
+	void Walk(float distance);
+	void Strafe(float distance);
+	void Pitch(float angle);
+	void RotateY(float angle);
 
 	Camera(Window& window);
 
 	void DisableLens();
 	void SetLens(float fovY, float zNear, float zFar); //TODO: update when window is resized
 
-	XMFLOAT4X4 GetWorldViewProjectionMatrix(Transform& transform);
+	XMFLOAT4X4 GetWVPMatrix(Transform& transform);
 
 private:
 	Window& window;

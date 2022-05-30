@@ -20,6 +20,7 @@ private:
 	ComPtr<ID3D11RenderTargetView> renderView;
 	ComPtr<IDXGISwapChain> swapChain;
 	ComPtr<ID3D11RasterizerState> rastState;
+	//ComPtr<ID3D11DepthStencilView> depthStencilView;
 	D3D11_VIEWPORT viewport;
 	Window& window;
 
@@ -27,8 +28,8 @@ public:
 	ComPtr<ID3D11Device> Device;
 	ComPtr<ID3D11DeviceContext> Context;
 
-	float clearColor[4] = { 0.35f, 0.35f, 0.35f, 1.0f };
-	void SetClearColor(float r, float g, float b);
+	float clearColor[4] = { 0.5f, 0.5f, 0.5f, 1.0f };
+	void SetClearColor(Vector3 color);
 
 	RenderDevice(Window& window);
 	void PreDraw();

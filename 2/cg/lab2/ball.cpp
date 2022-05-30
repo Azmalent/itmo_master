@@ -3,6 +3,7 @@
 
 #include <components/collider.h>
 #include <components/mesh.h>
+#include <shapes.h>
 
 #include <algorithm>
 #include <random>
@@ -20,26 +21,9 @@ BallComponent::BallComponent(Game& game) : SceneComponent(game)
 
 	auto pixelShader = new PixelShader(game, L"shaders/pixelShader.hlsl", nullptr, nullptr);
 
-	//Меш
-	DirectX::XMFLOAT4 points[] = {
-		DirectX::XMFLOAT4(R, R, 0.5f, 1.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
-		DirectX::XMFLOAT4(-R, -R, 0.5f, 1.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
-		DirectX::XMFLOAT4(R, -R, 0.5f, 1.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
-		DirectX::XMFLOAT4(-R, R, 0.5f, 1.0f),	DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
-	};
-
-	int indexes[] = {
-		0,1,2,
-		1,0,3
-	};
-
-	auto mesh = new Mesh(game,
-		vertexShader, pixelShader,
-		points, std::size(points),
-		indexes, std::size(indexes)
-	);
-
+	auto mesh = Shapes::Make2DRectangle(game, vertexShader, pixelShader, R*2, R*2);
 	AddChild(new MeshComponent(game, mesh));
+
 	AddChild(new BoxColliderComponent(game, Vector3(R, R, 0.5f)));
 
 	CollisionStartEvent.AddLambda([this](SceneComponent* other) {
@@ -68,7 +52,7 @@ void BallComponent::Update(float deltaTime)
 	if (y > 1 || y < -1) direction.y *= -1;
 	transform.SetPosition(x, std::clamp(y, -1.0f, 1.0f), 0.5f);
 
-	constBuffer.wvpMatrix = game.Camera.GetWorldViewProjectionMatrix(transform);
+	constBuffer.wvpMatrix = game.Camera.GetWVPMatrix(transform);
 }
 
 void BallComponent::ResetPosition()

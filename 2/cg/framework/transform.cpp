@@ -20,6 +20,16 @@ void Transform::SetScale(float x, float y, float z)
 	this->scale = Vector3(x, y, z);
 }
 
+void Transform::SetRotation(float roll, float pitch, float yaw)
+{
+	this->rotation = XMQuaternionRotationRollPitchYaw(roll, pitch, yaw);
+}
+
+void Transform::SetRotation(Quaternion rotation)
+{
+	this->rotation = rotation;
+}
+
 Vector3 Transform::GetAbsolutePosition()
 {
 	if (parent != nullptr) return position + parent->GetAbsolutePosition();
@@ -29,8 +39,8 @@ Vector3 Transform::GetAbsolutePosition()
 XMMATRIX Transform::GetWorldMatrix()
 {
 	auto scaleMatrix = XMMatrixScalingFromVector(scale);
-	auto translationMatrix = XMMatrixTranslationFromVector(position);
+	auto translationMatrix = XMMatrixTranslationFromVector( GetAbsolutePosition() );
 	auto rotationMatrix = XMMatrixRotationQuaternion(rotation);
 
-	return scaleMatrix * translationMatrix * rotationMatrix;
+	return scaleMatrix * rotationMatrix * translationMatrix;
 }

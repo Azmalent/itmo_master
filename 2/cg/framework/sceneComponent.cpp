@@ -10,21 +10,20 @@ Transform* SceneComponent::GetTransform()
 	return &transform;
 }
 
-void SceneComponent::SetParent(GameComponent* parent)
+void SceneComponent::SetParent(GameComponent* parent, bool initial)
 {
 	if (parent != nullptr && CanBeChildOf(parent))
 	{
 		this->parent = parent;
 
 		auto parentTransform = parent->GetTransform();
-		auto newPos = transform.GetAbsolutePosition();
 
-		if (parentTransform != nullptr)
+		if (parentTransform != nullptr && !initial)
 		{
-			newPos -= parentTransform->GetAbsolutePosition();
+			auto newPos = transform.GetAbsolutePosition() - parentTransform->GetAbsolutePosition();
+			transform.position = newPos;
 		}
 
 		transform.parent = parentTransform;
-		transform.position = newPos;
 	}
 }

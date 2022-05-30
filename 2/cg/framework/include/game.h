@@ -31,7 +31,16 @@ public:
 	RenderDevice Render;
 	InputDevice Input;
 
-	void AddComponent(GameComponent* component);
+	template<typename TComponent, typename = std::enable_if_t<std::is_base_of_v<GameComponent, TComponent>>>
+	TComponent* AddComponent(TComponent* component)
+	{
+		components.insert(components.end(), component);
+		component->Init();
+		component->InitChildren();
+
+		return component;
+	}
+
 	void DeleteComponent(GameComponent* component);
 
 	Game(LPCWSTR gameName);

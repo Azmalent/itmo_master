@@ -18,7 +18,8 @@ struct Transform
 	void SetPosition(float x, float y, float z);
 	void OffsetPosition(float deltaX, float deltaY, float deltaZ);
 	
-	//TODO: helper methods for rotating
+	void SetRotation(float roll, float pitch, float yaw);
+	void SetRotation(Quaternion rotation);
 
 	void SetScale(float scale);
 	void SetScale(float x, float y, float z);

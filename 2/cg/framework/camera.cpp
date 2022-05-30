@@ -18,27 +18,71 @@ void Camera::SetPosition(Vector3 pos)
 	UpdateViewMatrix();
 }
 
-void Camera::SetTarget(float x, float y, float z)
+void Camera::SetLook(float x, float y, float z)
 {
-	Target = Vector3(x, y, z);
+	Look = Vector3(x, y, z);
 	UpdateViewMatrix();
 }
 
-void Camera::SetTarget(Vector3 target)
+void Camera::SetLook(Vector3 target)
 {
-	Target = target;
+	Look = target;
 	UpdateViewMatrix();
 }
 
-void Camera::SetUpVector(float x, float y, float z)
+void Camera::SetUp(float x, float y, float z)
 {
-	UpVector = Vector3(x, y, z);
+	Up = Vector3(x, y, z);
 	UpdateViewMatrix();
 }
 
-void Camera::SetUpVector(Vector3 up)
+void Camera::SetUp(Vector3 up)
 {
-	UpVector = up;
+	Up = up;
+	UpdateViewMatrix();
+}
+
+void Camera::LookAt(Vector3 target, Vector3 worldUp)
+{
+	XMVECTOR L = XMVector3Normalize(target - Position);
+	XMVECTOR R = XMVector3Normalize(XMVector3Cross(worldUp, L));
+	XMVECTOR U = XMVector3Cross(L, R);
+
+	XMStoreFloat3(&Look, L);
+	XMStoreFloat3(&Right, R);
+	XMStoreFloat3(&Up, U);
+
+	UpdateViewMatrix();
+}
+
+void Camera::Walk(float distance)
+{
+	SetPosition(Position + Look * distance);
+}
+
+void Camera::Strafe(float distance)
+{
+	SetPosition(Position + Right * distance);
+}
+
+void Camera::Pitch(float angle)
+{
+	XMMATRIX rotation = XMMatrixRotationAxis(XMLoadFloat3(&Right), angle);
+
+	XMStoreFloat3(&Up, XMVector3TransformNormal(XMLoadFloat3(&Up), rotation));
+	XMStoreFloat3(&Look, XMVector3TransformNormal(XMLoadFloat3(&Look), rotation));
+
+	UpdateViewMatrix();
+}
+
+void Camera::RotateY(float angle)
+{
+	XMMATRIX rotation = XMMatrixRotationY(angle);
+
+	XMStoreFloat3(&Right, XMVector3TransformNormal(XMLoadFloat3(&Right), rotation));
+	XMStoreFloat3(&Up, XMVector3TransformNormal(XMLoadFloat3(&Up), rotation));
+	XMStoreFloat3(&Look, XMVector3TransformNormal(XMLoadFloat3(&Look), rotation));
+
 	UpdateViewMatrix();
 }
 
@@ -66,9 +110,19 @@ void Camera::SetLens(float fovY, float zNear, float zFar)
 void Camera::UpdateViewMatrix()
 {
 	XMVECTOR pos = XMLoadFloat3(&Position);
-	XMVECTOR target = XMLoadFloat3(&Target);
-	XMVECTOR up = XMLoadFloat3(&UpVector);
-	ViewMatrix = XMMatrixLookAtLH(pos, target, up);
+	XMVECTOR look = XMLoadFloat3(&Look);
+	XMVECTOR up = XMLoadFloat3(&Up);
+	XMVECTOR right = XMLoadFloat3(&Right);
+
+	look = XMVector3Normalize(look);
+	right = XMVector3Normalize(XMVector3Cross(up, look));
+	up = XMVector3Cross(look, right);
+
+	XMStoreFloat3(&Look, look);
+	XMStoreFloat3(&Right, right);
+	XMStoreFloat3(&Up, up);
+
+	ViewMatrix = XMMatrixLookAtLH(pos, pos + look, up);
 }
 
 void Camera::UpdateProjectionMatrix()
@@ -79,7 +133,7 @@ void Camera::UpdateProjectionMatrix()
 	}
 }
 
-XMFLOAT4X4 Camera::GetWorldViewProjectionMatrix(Transform& transform)
+XMFLOAT4X4 Camera::GetWVPMatrix(Transform& transform)
 {
 	auto wvpMatrix = transform.GetWorldMatrix() * ViewMatrix * ProjectionMatrix;
 

@@ -48,7 +48,7 @@ RenderDevice::RenderDevice(Window& window) : window(window), Context(nullptr), r
 	Device->CreateRenderTargetView(backBuffer.Get(), nullptr, renderView.GetAddressOf());
 
 	CD3D11_RASTERIZER_DESC rastDesc = {};
-	rastDesc.CullMode = D3D11_CULL_NONE;
+	rastDesc.CullMode = D3D11_CULL_BACK;
 	rastDesc.FillMode = D3D11_FILL_SOLID; // wireframe или solid
 
 	Device->CreateRasterizerState(&rastDesc, rastState.GetAddressOf());
@@ -62,11 +62,11 @@ RenderDevice::RenderDevice(Window& window) : window(window), Context(nullptr), r
 	viewport.MaxDepth = 1.0f;
 }
 
-void RenderDevice::SetClearColor(float r, float g, float b)
+void RenderDevice::SetClearColor(Vector3 color)
 {
-	clearColor[0] = r;
-	clearColor[1] = g;
-	clearColor[2] = b;
+	clearColor[0] = color.x;
+	clearColor[1] = color.y;
+	clearColor[2] = color.z;
 }
 
 void RenderDevice::PreDraw()

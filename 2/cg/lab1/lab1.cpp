@@ -1,5 +1,6 @@
 ﻿// lab1.cpp : Этот файл содержит функцию "main". Здесь начинается и заканчивается выполнение программы.
 //
+#include <colors.h>
 #include <game.h>
 #include <components/fpsCounter.h>
 #include <components/mesh.h>
@@ -15,6 +16,8 @@
 #pragma comment(lib, "dxgi.lib")
 #pragma comment(lib, "d3dcompiler.lib")
 #pragma comment(lib, "dxguid.lib")
+
+//using namespace DirectX::SimpleMath;
 
 class TriangleGame : public Game
 {
@@ -33,24 +36,18 @@ public:
 		auto pixelShader = new PixelShader(*this, L"shaders/pixelShader.hlsl", nullptr, nullptr);
 
 		//Меш
-		DirectX::XMFLOAT4 points[] = {
-			DirectX::XMFLOAT4(0.5f, 0.5f, 0.5f, 1.0f),		DirectX::XMFLOAT4(1.0f, 0.0f, 0.0f, 1.0f),
-			DirectX::XMFLOAT4(-0.5f, -0.5f, 0.5f, 1.0f),	DirectX::XMFLOAT4(0.0f, 0.0f, 1.0f, 1.0f),
-			DirectX::XMFLOAT4(0.5f, -0.5f, 0.5f, 1.0f),		DirectX::XMFLOAT4(0.0f, 1.0f, 0.0f, 1.0f),
-			DirectX::XMFLOAT4(-0.5f, 0.5f, 0.5f, 1.0f),		DirectX::XMFLOAT4(1.0f, 1.0f, 1.0f, 1.0f),
+		std::vector<Vertex> vertices = {
+			Vertex(0.5f, 0.5f, 0.5f, Colors::Red),
+			Vertex(-0.5f, -0.5f, 0.5f, Colors::Blue),
+			Vertex(0.5f, -0.5f, 0.5f, Colors::Green),
+			Vertex(-0.5f, 0.5f, 0.5f, Colors::White)
 		};
 
-		int indexes[] = {
-			0,1,2, 
-			1,0,3 
+		std::vector<Vector3> tris = {
+			{0, 1, 2}, {1, 0, 3}
 		};
 
-		auto mesh = new Mesh(*this, 
-			vertexShader, 
-			pixelShader, 
-			points, std::size(points), 
-			indexes, std::size(indexes)
-		);
+		auto mesh = new Mesh(*this, vertexShader, pixelShader, vertices, tris);
 
 		//Компонент меша
 		auto meshComponent = new MeshComponent(*this, mesh);
