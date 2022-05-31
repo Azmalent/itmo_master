@@ -33,6 +33,7 @@ sun->AddChild(CELESTIAL_BODY((radius), (color), (orbitRadius), (orbitPeriod)))
 
 SolarSystemGame::SolarSystemGame(LPCWSTR gameName) : Game(gameName)
 {
+    Window.DisableCursor();
     Render.SetClearColor(Colors::Black);
     Camera.SetLens(0.25f * 3.14f, 0.1f, 1000.0f);
 

@@ -7,30 +7,12 @@
 static LRESULT CALLBACK WndProc(HWND hwnd, UINT umessage, WPARAM wparam, LPARAM lparam)
 {
 	Window* window = reinterpret_cast<Window*>(GetWindowLongPtr(hwnd, GWLP_USERDATA));
-
-	switch (umessage)
+	if (window != nullptr) 
 	{
-		case WM_SIZE:
-		{
-			if (window != nullptr)
-			{
-				window->ClientWidth = LOWORD(lparam);
-				window->ClientHeight = LOWORD(lparam);
-				return 0;
-			}
-		}
-		case WM_INPUT:
-		{
-			if (window != nullptr && window->Input != nullptr)
-			{
-				window->Input->OnInput(lparam);
-			}
-		}
-		default:
-		{
-			return DefWindowProc(hwnd, umessage, wparam, lparam);
-		}
+		return window->HandleMessage(umessage, wparam, lparam);
 	}
+
+	return DefWindowProc(hwnd, umessage, wparam, lparam);
 }
 
 Game::Game(LPCWSTR gameName) : Window(800, 800, gameName, WndProc), Camera(Window), Render(Window), Input(this)

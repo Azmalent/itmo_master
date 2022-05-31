@@ -39,12 +39,84 @@ Window::Window(int width, int height, LPCWSTR applicationName, WNDPROC messageHa
 	SetForegroundWindow(hWnd);
 	SetFocus(hWnd);
 
-	ShowCursor(true);
+	ShowCursor();
+}
+
+LRESULT Window::HandleMessage(UINT umessage, WPARAM wparam, LPARAM lparam)
+{
+	switch (umessage)
+	{
+	case WM_SIZE:
+		ClientWidth = LOWORD(lparam);
+		ClientHeight = LOWORD(lparam);
+		return 0;
+
+	case WM_INPUT:
+		if (Input != nullptr) Input->OnInput(lparam);
+		break;
+
+	case WM_ACTIVATE:
+		if (!cursorEnabled)
+		{
+			if (wparam & WA_ACTIVE)
+			{
+				ConfineCursor();
+				HideCursor();
+			}
+			else
+			{
+				FreeCursor();
+				ShowCursor();
+			}
+		}
+		break;
+	}
+
+	return DefWindowProc(hWnd, umessage, wparam, lparam);
 }
 
 void Window::Close(int exitCode)
 {
 	PostQuitMessage(exitCode);
+}
+
+void Window::EnableCursor()
+{
+	cursorEnabled = true;
+
+	ShowCursor();
+	FreeCursor();
+}
+
+void Window::DisableCursor()
+{
+	cursorEnabled = false;
+
+	HideCursor();
+	ConfineCursor();
+}
+
+void Window::ShowCursor()
+{
+	while (::ShowCursor(TRUE) < 0);
+}
+
+void Window::HideCursor()
+{
+	while (::ShowCursor(FALSE) >= 0);
+}
+
+void Window::ConfineCursor()
+{
+	RECT rect;
+	GetClientRect(hWnd, &rect);
+	MapWindowPoints(hWnd, nullptr, reinterpret_cast<POINT*>(&rect), 2);
+	ClipCursor(&rect);
+}
+
+void Window::FreeCursor()
+{
+	ClipCursor(nullptr);
 }
 
 Vector2 Window::PixelToViewportPos(Vector2 pos)
