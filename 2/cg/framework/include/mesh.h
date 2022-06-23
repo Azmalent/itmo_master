@@ -10,12 +10,13 @@
 struct Vertex
 {
 	Vector3 pos = Vector3::Zero;
+	Vector3 normal = Vector3::One;
 	Vector4 color = Vector4(0, 0, 0, 1);
 
 public:
-	Vertex(float x, float y, float z);
-	Vertex(float x, float y, float z, Vector3 color);
-	Vertex(float x, float y, float z, Vector4 color);
+	Vertex(float x, float y, float z, Vector3 normal);
+	Vertex(float x, float y, float z, Vector3 normal, Vector3 color);
+	Vertex(float x, float y, float z, Vector3 normal, Vector4 color);
 };
 
 struct Mesh
@@ -29,7 +30,7 @@ struct Mesh
 	std::vector<DirectX::XMFLOAT4> points;
 	std::vector<int> indexes;
 
-	UINT strides[1] = { 32 };
+	UINT strides[1] = { sizeof(Vector4) * 3 };
 	UINT offsets[1] = { 0 };
 
 	Mesh(Game& game, std::vector<Vertex>& vertices, std::vector<Vector3>& tris, Material* material);

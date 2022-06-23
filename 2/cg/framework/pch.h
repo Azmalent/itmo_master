@@ -23,6 +23,7 @@
 #include "include/game.h"
 #include "include/input.h"
 #include "include/keys.h"
+#include "include/material.h"
 #include "include/mesh.h"
 #include "include/render.h"
 #include "include/shader.h"

@@ -6,10 +6,10 @@ Mesh* Shapes::Make2DRectangle(Game& game, Material* material, float width, float
 	float halfHeight = height / 2;
 
 	std::vector<Vertex> vertices = {
-		Vertex(halfWidth, halfHeight, z, color),
-		Vertex(-halfWidth, -halfHeight, z, color),
-		Vertex(halfWidth, -halfHeight, z, color),
-		Vertex(-halfWidth, halfHeight, z, color)
+		Vertex(halfWidth, halfHeight,   z, Vector3(0, 0, 1), color),
+		Vertex(-halfWidth, -halfHeight, z, Vector3(0, 0, 1), color),
+		Vertex(halfWidth, -halfHeight,  z, Vector3(0, 0, 1), color),
+		Vertex(-halfWidth, halfHeight,  z, Vector3(0, 0, 1), color)
 	};
 
 	std::vector<Vector3> tris = {
@@ -24,8 +24,8 @@ Mesh* Shapes::MakeSphere(Game& game, Material* material, float radius, int numSl
 	std::vector<Vertex> vertices;
 	std::vector<Vector3> tris;
 
-	Vertex northPole(0, +radius, 0, color);
-	Vertex southPole(0, -radius, 0, color);
+	Vertex northPole(0, +radius, 0, Vector3(0, 1, 0), color);
+	Vertex southPole(0, -radius, 0, Vector3(0, -1, 0), color);
 
 	vertices.push_back(northPole);
 
@@ -44,7 +44,10 @@ Mesh* Shapes::MakeSphere(Game& game, Material* material, float radius, int numSl
 			float y = radius * cosf(phi);
 			float z = radius * sinf(phi) * sinf(theta);
 
-			Vertex v(x, y, z, color);
+			Vector3 normal(x, y, z);
+			normal.Normalize();
+
+			Vertex v(x, y, z, normal, color);
 			vertices.push_back(v);
 		}
 	}

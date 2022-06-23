@@ -1,16 +1,16 @@
 #include "pch.h"
 
-Vertex::Vertex(float x, float y, float z) : pos(x, y, z)
+Vertex::Vertex(float x, float y, float z, Vector3 normal) : pos(x, y, z), normal(normal)
 {
 
 }
 
-Vertex::Vertex(float x, float y, float z, Vector3 color) : pos(x, y, z), color(color.x, color.y, color.z, 1)
+Vertex::Vertex(float x, float y, float z, Vector3 normal, Vector3 color) : pos(x, y, z), normal(normal), color(color.x, color.y, color.z, 1)
 {
 
 }
 
-Vertex::Vertex(float x, float y, float z, Vector4 color) : pos(x, y, z), color(color)
+Vertex::Vertex(float x, float y, float z, Vector3 normal, Vector4 color) : pos(x, y, z), normal(normal), color(color)
 {
 
 }
@@ -20,8 +20,10 @@ Mesh::Mesh(Game& game, std::vector<Vertex>& vertices, std::vector<Vector3>& tris
 	for (auto vertex : vertices) 
 	{
 		auto pos = vertex.pos;
+		auto n = vertex.normal;
 
 		points.push_back({pos.x, pos.y, pos.z, 1});
+		points.push_back({n.x, n.y, n.z, 0});
 		points.push_back(vertex.color);
 	}
 
@@ -37,24 +39,9 @@ Mesh::Mesh(Game& game, std::vector<Vertex>& vertices, std::vector<Vector3>& tris
 
 	//Vertex buffer
 	D3D11_INPUT_ELEMENT_DESC inputElements[] = {
-		D3D11_INPUT_ELEMENT_DESC {
-			"POSITION",
-			0,
-			DXGI_FORMAT_R32G32B32A32_FLOAT,
-			0,
-			0,
-			D3D11_INPUT_PER_VERTEX_DATA,
-			0
-		},
-		D3D11_INPUT_ELEMENT_DESC {
-			"COLOR",
-			0,
-			DXGI_FORMAT_R32G32B32A32_FLOAT,
-			0,
-			D3D11_APPEND_ALIGNED_ELEMENT,
-			D3D11_INPUT_PER_VERTEX_DATA,
-			0
-		}
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, 0, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "NORMAL", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 },
+		{ "COLOR", 0, DXGI_FORMAT_R32G32B32A32_FLOAT, 0, D3D11_APPEND_ALIGNED_ELEMENT, D3D11_INPUT_PER_VERTEX_DATA, 0 }
 	};
 
 	game.Render.Device->CreateInputLayout(
