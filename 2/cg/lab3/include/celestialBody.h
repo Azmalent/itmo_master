@@ -19,21 +19,20 @@ protected:
 	};
 
 	struct PointLightData {
-		Vector3 diffuseColor;
-		Vector3 specularColor;
-		Vector3 position;
+		Vector4 diffuseColor;
+		Vector4 specularColor;
+		Vector4 position;
 		float specularPower;
 		float innerRadius;
 		float outerRadius;
+		float _padding[1];
 	};
 
 	struct PixelConstBuffer {
 		MaterialData material;		//32
 		PointLightData pointLight;	//80
-		Vector3 ambientLight;		//92
-		Vector3 cameraPos;			//104
-
-		float _padding[2];			//112
+		Vector4 ambientLight;		//96
+		Vector4 cameraPos;			//112
 	};
 #pragma pack(pop)
 

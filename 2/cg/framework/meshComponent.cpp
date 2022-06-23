@@ -25,13 +25,13 @@ void MeshComponent::Draw()
 	if (pixelShader->constBuffer != nullptr)
 	{
 		context->PSSetConstantBuffers(0, 1, pixelShader->constBuffer.GetAddressOf());
-		pixelShader->UpdateConstBuffer(game.Render.Context);
+		pixelShader->UpdateConstBuffer(context);
 	}
 
 	if (vertexShader->constBuffer != nullptr)
 	{
 		context->VSSetConstantBuffers(0, 1, vertexShader->constBuffer.GetAddressOf());
-		vertexShader->UpdateConstBuffer(game.Render.Context);
+		vertexShader->UpdateConstBuffer(context);
 	}
 
 	context->DrawIndexed(mesh->indexes.size(), 0, 0);

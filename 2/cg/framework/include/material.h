@@ -12,12 +12,11 @@ using namespace DirectX::SimpleMath;
 #pragma pack(push, 4)
 struct MaterialData
 {
-	Vector3 diffuseColor = Vector3::One;	//12
-	float diffuse = 1.0f;		//16
-	float ambient = 0.8f;		//20
-	float specular = 0.5f;		//24
-	float shininess = 250.0f;	//28
-	float _padding[1];			//32
+	Vector4 diffuseColor = Vector4::One;	//16
+	float diffuse = 1.0f;		//20
+	float ambient = 0.8f;		//24
+	float specular = 0.5f;		//28
+	float shininess = 250.0f;	//32
 };
 #pragma pack(pop)
 

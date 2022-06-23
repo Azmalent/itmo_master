@@ -14,20 +14,24 @@ CelestialBodyComponent::CelestialBodyComponent(Game& game, float radius, Vector3
 		.pixelShader = std::make_unique<PixelShader>(game, L"shaders/pixelShader.hlsl", nullptr, nullptr)
 	};
 
+	std::cout << "sizeof(MaterialData): " << sizeof(MaterialData) << std::endl;
+	std::cout << "sizeof(PointLightData): " << sizeof(CelestialBodyComponent::PointLightData) << std::endl;
+	std::cout << "sizeof(PixelConstBuffer): " << sizeof(CelestialBodyComponent::PixelConstBuffer) << std::endl;
+
 	material->vertexShader->SetConstBuffer(&vertexConstBuffer, sizeof(CelestialBodyComponent::VertexConstBuffer));
 	material->pixelShader->SetConstBuffer(&pixelConstBuffer, sizeof(CelestialBodyComponent::PixelConstBuffer));
 
 	pixelConstBuffer.material = material->data;
 	pixelConstBuffer.pointLight = {
-		.diffuseColor = Colors::White,
-		.specularColor = Colors::Red,
-		.position = Vector3::Zero,
+		.diffuseColor = Vector4(1, 1, 1, 1),
+		.specularColor = Vector4(1, 1, 1, 1),
+		.position = Vector4(0, 0, 0, 0),
 		.specularPower = 1.0f,
 		.innerRadius = 100.0f,
 		.outerRadius = 250.0f
 	};
 
-	pixelConstBuffer.ambientLight = Vector3(0.25f, 0.25f, 0.25f);
+	pixelConstBuffer.ambientLight = Vector4(0.25f, 0.25f, 0.25f, 0);
 
 	auto mesh = Shapes::MakeSphere(game, material, radius, 10, 10, color);
 	AddChild(new MeshComponent(game, mesh));
@@ -55,5 +59,6 @@ void CelestialBodyComponent::Update(float deltaTime)
 	auto transposed = XMMatrixTranspose(worldMatrix);
 	XMStoreFloat4x4(&vertexConstBuffer.worldMatrix, transposed);
 
-	pixelConstBuffer.cameraPos = Vector3(game.Camera.Position);
+	auto pos = game.Camera.Position;
+	pixelConstBuffer.cameraPos = Vector4(pos.x, pos.y, pos.z, 0);
 }
