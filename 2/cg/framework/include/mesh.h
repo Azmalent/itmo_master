@@ -1,10 +1,10 @@
 #pragma once
 
 #include "game.h"
-#include "shader.h"
+#include "material.h"
 
 #include <DirectXMath.h>
-#include <memory.h>
+#include <SimpleMath.h>
 #include <vector>
 
 struct Vertex
@@ -20,8 +20,7 @@ public:
 
 struct Mesh
 {
-	std::unique_ptr<VertexShader> vertexShader;
-	std::unique_ptr<PixelShader> pixelShader;
+	std::shared_ptr<Material> material;
 	ComPtr<ID3D11InputLayout> layout;
 
 	ComPtr<ID3D11Buffer> indexBuffer;
@@ -33,6 +32,6 @@ struct Mesh
 	UINT strides[1] = { 32 };
 	UINT offsets[1] = { 0 };
 
-	Mesh(Game& game, VertexShader* vertexShader, PixelShader* pixelShader, std::vector<Vertex>& vertices, std::vector<Vector3>& tris);
+	Mesh(Game& game, std::vector<Vertex>& vertices, std::vector<Vector3>& tris, Material* material);
 	~Mesh() = default;
 };

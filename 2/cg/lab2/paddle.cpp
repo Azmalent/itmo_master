@@ -10,12 +10,14 @@ static const float height = 0.5f;
 
 PaddleComponent::PaddleComponent(Game& game, BallComponent& ball) : SceneComponent(game), ball(ball)
 {
-	auto vertexShader = new VertexShader(game, L"shaders/vertexShader.hlsl", nullptr, nullptr);
-	vertexShader->SetConstBuffer(&constBuffer, sizeof(PaddleComponent::ConstBuffer));
-	
-	auto pixelShader = new PixelShader(game, L"shaders/pixelShader.hlsl", nullptr, nullptr);
+	auto material = new Material {
+		.vertexShader = std::make_unique<VertexShader>(game, L"shaders/vertexShader.hlsl", nullptr, nullptr),
+		.pixelShader = std::make_unique<PixelShader>(game, L"shaders/pixelShader.hlsl", nullptr, nullptr)
+	};
 
-	auto mesh = Shapes::Make2DRectangle(game, vertexShader, pixelShader, width, height);
+	material->vertexShader->SetConstBuffer(&constBuffer, sizeof(PaddleComponent::ConstBuffer));
+
+	auto mesh = Shapes::Make2DRectangle(game, material, width, height);
 	AddChild(new MeshComponent(game, mesh));
 
 	AddChild(new BoxColliderComponent(game, Vector3(width / 2, height / 2, 0.5f)));

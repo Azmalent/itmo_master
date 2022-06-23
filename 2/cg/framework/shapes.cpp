@@ -1,6 +1,6 @@
 #include "pch.h"
 
-Mesh* Shapes::Make2DRectangle(Game& game, VertexShader* vertexShader, PixelShader* pixelShader, float width, float height, float z, Vector3 color)
+Mesh* Shapes::Make2DRectangle(Game& game, Material* material, float width, float height, float z, Vector3 color)
 {
 	float halfWidth = width / 2;
 	float halfHeight = height / 2;
@@ -16,10 +16,10 @@ Mesh* Shapes::Make2DRectangle(Game& game, VertexShader* vertexShader, PixelShade
 		{0, 1, 2}, {1, 0, 3}
 	};
 
-	return new Mesh(game, vertexShader, pixelShader, vertices, tris);
+	return new Mesh(game, vertices, tris, material);
 }
 
-Mesh* Shapes::MakeSphere(Game& game, VertexShader* vertexShader, PixelShader* pixelShader, float radius, int numSlices, int numStacks, Vector3 color)
+Mesh* Shapes::MakeSphere(Game& game, Material* material, float radius, int numSlices, int numStacks, Vector3 color)
 {
 	std::vector<Vertex> vertices;
 	std::vector<Vector3> tris;
@@ -84,5 +84,5 @@ Mesh* Shapes::MakeSphere(Game& game, VertexShader* vertexShader, PixelShader* pi
 		tris.push_back(Vector3(southPoleIndex, baseIndex + i, baseIndex + i + 1));
 	}
 
-	return new Mesh(game, vertexShader, pixelShader, vertices, tris);
+	return new Mesh(game, vertices, tris, material);
 }

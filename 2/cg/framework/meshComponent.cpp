@@ -17,20 +17,21 @@ void MeshComponent::Draw()
 	context->IASetIndexBuffer(mesh->indexBuffer.Get(), DXGI_FORMAT_R32_UINT, 0);
 	context->IASetVertexBuffers(0, 1, mesh->vertexBuffer.GetAddressOf(), mesh->strides, mesh->offsets);
 
-	context->PSSetShader(mesh->pixelShader->shader.Get(), nullptr, 0);
-	context->VSSetShader(mesh->vertexShader->shader.Get(), nullptr, 0);
+	auto pixelShader = mesh->material->pixelShader.get();
+	auto vertexShader = mesh->material->vertexShader.get();
+	context->PSSetShader(pixelShader->shader.Get(), nullptr, 0);
+	context->VSSetShader(vertexShader->shader.Get(), nullptr, 0);
 
-	auto pixelConstBuffer = mesh->pixelShader->constBuffer;
-	if (pixelConstBuffer != nullptr)
+	if (pixelShader->constBuffer != nullptr)
 	{
-		context->PSSetConstantBuffers(0, 1, pixelConstBuffer.GetAddressOf());
-		mesh->pixelShader->UpdateConstBuffer(game.Render.Context);
+		context->PSSetConstantBuffers(0, 1, pixelShader->constBuffer.GetAddressOf());
+		pixelShader->UpdateConstBuffer(game.Render.Context);
 	}
 
-	if (mesh->vertexShader->constBuffer != nullptr)
+	if (vertexShader->constBuffer != nullptr)
 	{
-		context->VSSetConstantBuffers(0, 1, mesh->vertexShader->constBuffer.GetAddressOf());
-		mesh->vertexShader->UpdateConstBuffer(game.Render.Context);
+		context->VSSetConstantBuffers(0, 1, vertexShader->constBuffer.GetAddressOf());
+		vertexShader->UpdateConstBuffer(game.Render.Context);
 	}
 
 	context->DrawIndexed(mesh->indexes.size(), 0, 0);

@@ -7,12 +7,14 @@
 CelestialBodyComponent::CelestialBodyComponent(Game& game, float radius, Vector3 color, float orbitRadius, float orbitPeriod)
 	: SceneComponent(game), orbitRadius(orbitRadius), orbitTimer(orbitPeriod, true), rotationTimer(10, true)
 {
-	auto vertexShader = new VertexShader(game, L"shaders/vertexShader.hlsl", nullptr, nullptr);
-	vertexShader->SetConstBuffer(&constBuffer, sizeof(CelestialBodyComponent::ConstBuffer));
+	auto material = new Material{
+		.vertexShader = std::make_unique<VertexShader>(game, L"shaders/vertexShader.hlsl", nullptr, nullptr),
+		.pixelShader = std::make_unique<PixelShader>(game, L"shaders/pixelShader.hlsl", nullptr, nullptr)
+	};
 
-	auto pixelShader = new PixelShader(game, L"shaders/pixelShader.hlsl", nullptr, nullptr);
+	material->vertexShader->SetConstBuffer(&constBuffer, sizeof(CelestialBodyComponent::ConstBuffer));
 
-	auto mesh = Shapes::MakeSphere(game, vertexShader, pixelShader, radius, 10, 10, color);
+	auto mesh = Shapes::MakeSphere(game, material, radius, 10, 10, color);
 	AddChild(new MeshComponent(game, mesh));
 
 	transform.SetPosition(orbitRadius, 0, 0);

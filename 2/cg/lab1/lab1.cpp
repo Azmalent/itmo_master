@@ -26,14 +26,10 @@ private:
 
 public:
 	TriangleGame(LPCWSTR gameName) : Game(gameName) 
-	{ 
+	{
 		//Счётчик FPS
 		auto fpsCounter = new FpsCounterComponent(*this);
 		AddComponent(fpsCounter);
-
-		//Инициализация шейдеров
-		auto vertexShader = new VertexShader(*this, L"shaders/vertexShader.hlsl", nullptr, nullptr);
-		auto pixelShader = new PixelShader(*this, L"shaders/pixelShader.hlsl", nullptr, nullptr);
 
 		//Меш
 		std::vector<Vertex> vertices = {
@@ -47,7 +43,13 @@ public:
 			{0, 1, 2}, {1, 0, 3}
 		};
 
-		auto mesh = new Mesh(*this, vertexShader, pixelShader, vertices, tris);
+		//Инициализация шейдеров
+		auto material = new Material {
+			.vertexShader = std::make_unique<VertexShader>(*this, L"shaders/vertexShader.hlsl", nullptr, nullptr),
+			.pixelShader = std::make_unique<PixelShader>(*this, L"shaders/pixelShader.hlsl", nullptr, nullptr)
+		};
+
+		auto mesh = new Mesh(*this, vertices, tris, material);
 
 		//Компонент меша
 		auto meshComponent = new MeshComponent(*this, mesh);

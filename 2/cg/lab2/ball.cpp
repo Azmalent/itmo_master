@@ -16,12 +16,14 @@ static const float MAX_SPEED = 1.5;
 
 BallComponent::BallComponent(Game& game) : SceneComponent(game)
 {
-	auto vertexShader = new VertexShader(game, L"shaders/vertexShader.hlsl", nullptr, nullptr);
-	vertexShader->SetConstBuffer(&constBuffer, sizeof(BallComponent::ConstBuffer));
+	auto material = new Material {
+		.vertexShader = std::make_unique<VertexShader>(game, L"shaders/vertexShader.hlsl", nullptr, nullptr),
+		.pixelShader = std::make_unique<PixelShader>(game, L"shaders/pixelShader.hlsl", nullptr, nullptr)
+	};
 
-	auto pixelShader = new PixelShader(game, L"shaders/pixelShader.hlsl", nullptr, nullptr);
+	material->vertexShader->SetConstBuffer(&constBuffer, sizeof(BallComponent::ConstBuffer));
 
-	auto mesh = Shapes::Make2DRectangle(game, vertexShader, pixelShader, R*2, R*2);
+	auto mesh = Shapes::Make2DRectangle(game, material, R*2, R*2);
 	AddChild(new MeshComponent(game, mesh));
 
 	AddChild(new BoxColliderComponent(game, Vector3(R, R, 0.5f)));

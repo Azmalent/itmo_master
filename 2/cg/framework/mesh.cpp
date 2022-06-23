@@ -15,7 +15,7 @@ Vertex::Vertex(float x, float y, float z, Vector4 color) : pos(x, y, z), color(c
 
 }
 
-Mesh::Mesh(Game& game, VertexShader* vertexShader, PixelShader* pixelShader, std::vector<Vertex>& vertices, std::vector<Vector3>& tris) : vertexShader(vertexShader), pixelShader(pixelShader)
+Mesh::Mesh(Game& game, std::vector<Vertex>& vertices, std::vector<Vector3>& tris, Material* material) : material(material)
 {
 	for (auto vertex : vertices) 
 	{
@@ -60,8 +60,8 @@ Mesh::Mesh(Game& game, VertexShader* vertexShader, PixelShader* pixelShader, std
 	game.Render.Device->CreateInputLayout(
 		inputElements,
 		std::size(inputElements),
-		vertexShader->byteCode->GetBufferPointer(),
-		vertexShader->byteCode->GetBufferSize(),
+		material->vertexShader->byteCode->GetBufferPointer(),
+		material->vertexShader->byteCode->GetBufferSize(),
 		layout.GetAddressOf()
 	);
 
