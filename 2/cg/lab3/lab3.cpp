@@ -43,11 +43,11 @@ SolarSystemGame::SolarSystemGame(LPCWSTR gameName) : Game(gameName)
     venus      = PLANET(6052, Colors::Silver, 0.5f, 0.615f);
     earth      = PLANET(6378, Colors::Blue, 1, 1);
     mars       = PLANET(3397, Colors::Brown, 1.5f, 1.88f);
-    jupiter    = PLANET(71490 / 4, Colors::Gray, 2.5f, 11.857f);
-    saturn     = PLANET(60270 / 4, Colors::Gray, 4.05f, 29.4f);
-    uranus     = PLANET(25560 / 4, Colors::Gray, 5.1f, 84.02f);
-    neptune    = PLANET(24760 / 4, Colors::Gray, 7.33f, 164.79f);
-    pluto      = PLANET(1151, Colors::Gray, 9.0f, 247.92f);
+    jupiter    = PLANET(71490 / 4, Colors::Brown, 2.5f, 11.857f);
+    saturn     = PLANET(60270 / 4, Colors::Yellow, 4.05f, 29.4f);
+    uranus     = PLANET(25560 / 4, Colors::Green, 5.1f, 84.02f);
+    neptune    = PLANET(24760 / 4, Colors::Cyan, 7.33f, 164.79f);
+    pluto      = PLANET(1151, Colors::LightGray, 9.0f, 247.92f);
 
     auto moon   = MOON(earth, 1738, Colors::Gray, 0.15f, 0.075f);
     auto phobos = MOON(mars, 11 * 100, Colors::Gray, 0.1f, 0.002f);

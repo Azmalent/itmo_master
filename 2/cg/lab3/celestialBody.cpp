@@ -11,25 +11,24 @@ CelestialBodyComponent::CelestialBodyComponent(Game& game, float radius, Vector3
 {
 	auto material = new Material{
 		.vertexShader = std::make_unique<VertexShader>(game, L"shaders/vertexShader.hlsl", nullptr, nullptr),
-		.pixelShader = std::make_unique<PixelShader>(game, L"shaders/pixelShader.hlsl", nullptr, nullptr)
+		.pixelShader = std::make_unique<PixelShader>(game, L"shaders/pixelShader.hlsl", nullptr, nullptr),
+		.data = MaterialData()
 	};
 
-	std::cout << "sizeof(MaterialData): " << sizeof(MaterialData) << std::endl;
-	std::cout << "sizeof(PointLightData): " << sizeof(CelestialBodyComponent::PointLightData) << std::endl;
-	std::cout << "sizeof(PixelConstBuffer): " << sizeof(CelestialBodyComponent::PixelConstBuffer) << std::endl;
+	if (orbitRadius == 0)
+	{
+		material->data.emissive = Vector4::One;
+	}
 
 	material->vertexShader->SetConstBuffer(&vertexConstBuffer, sizeof(CelestialBodyComponent::VertexConstBuffer));
 	material->pixelShader->SetConstBuffer(&pixelConstBuffer, sizeof(CelestialBodyComponent::PixelConstBuffer));
 
 	pixelConstBuffer.material = material->data;
-	pixelConstBuffer.pointLight = {
-		.diffuseColor = Vector4(1, 1, 1, 1),
-		.specularColor = Vector4(1, 1, 1, 1),
-		.position = Vector4(0, 0, 0, 0),
-		.specularPower = 1.0f,
-		.innerRadius = 100.0f,
-		.outerRadius = 250.0f
-	};
+
+	pixelConstBuffer.pointLight = PointLightData();
+	pixelConstBuffer.pointLight.position = Vector4::Zero;
+	pixelConstBuffer.pointLight.color = Vector4::One;
+	pixelConstBuffer.pointLight.attenuation = Vector3(1, 0.08f, 0) / 2;
 
 	pixelConstBuffer.ambientLight = Vector4(0.25f, 0.25f, 0.25f, 0);
 

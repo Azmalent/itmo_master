@@ -33,21 +33,20 @@ public:
 
 		//Меш
 		std::vector<Vertex> vertices = {
-			Vertex(0.5f, 0.5f, 0.5f, Colors::Red),
-			Vertex(-0.5f, -0.5f, 0.5f, Colors::Blue),
-			Vertex(0.5f, -0.5f, 0.5f, Colors::Green),
-			Vertex(-0.5f, 0.5f, 0.5f, Colors::White)
+			Vertex(0.5f, 0.5f, 0.5f, -Vector3::Forward, Colors::Red),
+			Vertex(0.5f, -0.5f, 0.5f, -Vector3::Forward, Colors::Green),
+			Vertex(-0.5f, -0.5f, 0.5f, -Vector3::Forward, Colors::Blue),
+			Vertex(-0.5f, 0.5f, 0.5f, -Vector3::Forward, Colors::White)
 		};
 
 		std::vector<Vector3> tris = {
-			{0, 1, 2}, {1, 0, 3}
+			{0, 1, 2}, {2, 3, 0}
 		};
 
 		//Инициализация шейдеров
-		auto material = new Material {
-			.vertexShader = std::make_unique<VertexShader>(*this, L"shaders/vertexShader.hlsl", nullptr, nullptr),
-			.pixelShader = std::make_unique<PixelShader>(*this, L"shaders/pixelShader.hlsl", nullptr, nullptr)
-		};
+		auto material = new Material();
+		material->vertexShader = std::make_unique<VertexShader>(*this, L"shaders/vertexShader.hlsl", nullptr, nullptr);
+		material->pixelShader = std::make_unique<PixelShader>(*this, L"shaders/pixelShader.hlsl", nullptr, nullptr);
 
 		auto mesh = new Mesh(*this, vertices, tris, material);
 

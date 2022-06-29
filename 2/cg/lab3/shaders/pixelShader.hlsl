@@ -6,61 +6,81 @@ struct FRAG_IN
 	float4 color : COLOR;
 };
 
-struct MaterialData //8 * 4 = 32
+struct MaterialData
 {
-	float4 diffuseColor;
+	float4 emissive;
 	float diffuse;
 	float ambient;
 	float specular;
-	float shininess;
+	float specularPower;
 };
 
-struct PointLightData //16 * 4 = 64
+struct PointLightData
 {
-	float4 diffuseColor;
-	float4 specularColor;
 	float4 position;
-	float specularPower;
-	float innerRadius;
-	float outerRadius;
+	float4 color;
+	float3 attenuation;
+	float _padding;
+};
 
-	float _padding[1];
+struct LightResult
+{
+	float4 diffuse;
+	float4 specular;
 };
 
 cbuffer ConstBuffer : register(b0)
 {
-	MaterialData material;		//32
-	PointLightData pointLight;	//96
-	float4 ambientLight;		//112
-	float4 cameraPosition;		//128
+	MaterialData material;
+	PointLightData pointLight;
+	float3 ambientLight;
+	float ambientLightStrength; 
+	float4 cameraPosition;
+}
+
+float doAttenuation(float d)
+{
+	return 1.0f / (pointLight.attenuation.x + pointLight.attenuation.y * d + pointLight.attenuation.z * d * d);
+}
+
+float4 doDiffuse(float3 L, float3 N)
+{
+	float NdotL = max(0, dot(N, L));
+	return pointLight.color * NdotL;
+}
+
+float4 doSpecular(float3 V, float3 L, float4 N)
+{
+	float3 R = normalize(reflect(-L, N));
+	float RdotV = max(0, dot(R, V));
+	return pointLight.color * pow(RdotV, material.specularPower);
+}
+
+LightResult doLighting(float4 P, float4 N)
+{
+	float3 V = normalize(cameraPosition - P).xyz;
+
+	float3 L = (pointLight.position - P).xyz;
+	float distance = length(L);
+	L = L / distance;
+
+	float attenuation = doAttenuation(distance);
+
+	LightResult result;
+	result.diffuse = doDiffuse(L, N) * attenuation;
+	result.specular = doSpecular(V, L, N) * attenuation;
+
+	return result;
 }
 
 float4 main(FRAG_IN input) : SV_Target
 {
-	//ambient light
-	float3 phong = ambientLight.xyz;
+	LightResult lit = doLighting(input.worldPos, input.normal);
 
-	// Point light
-	float3 N = normalize(input.normal.xyz);
-	float3 V = normalize(cameraPosition.xyz - input.worldPos.xyz);
+	float4 emissive = material.emissive;
+	float4 ambient = material.ambient * float4(ambientLight, 1.0f) * ambientLightStrength;
+	float4 diffuse = material.diffuse * lit.diffuse;
+	float4 specular = material.specular * lit.specular;
 
-	float3 L = normalize(pointLight.position.xyz - input.worldPos.xyz);
-	float3 R = reflect(-L, N);
-
-	float NdotL = dot(N, L);
-	if (NdotL > 0) {
-		/*Diffuse color*/
-		float dist = distance(input.worldPos.xyz, pointLight.position.xyz);
-		float sstep = smoothstep(pointLight.innerRadius, pointLight.outerRadius, dist);
-
-		float3 diffuseColor = lerp(pointLight.diffuseColor.xyz, float3(0.0f, 0.0f, 0.0f), sstep);
-		phong += (diffuseColor * NdotL);
-
-		/*Specular color*/
-		float RdotV = dot(R, V);
-		phong += pointLight.specularColor.xyz * pow(max(0.0f, RdotV), pointLight.specularPower);
-	}
-
-	float4 finalPhong = float4(phong, 0.0f);
-	return input.color * saturate(finalPhong);
+	return (emissive + ambient + diffuse + specular) * input.color;
 }

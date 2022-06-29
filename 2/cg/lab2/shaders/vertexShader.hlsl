@@ -1,6 +1,7 @@
 struct VERT_IN
 {
 	float4 pos : POSITION0;
+	float4 normal : NORMAL;
 	float4 col : COLOR0;
 };
 

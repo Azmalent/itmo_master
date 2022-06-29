@@ -5,7 +5,7 @@
 #include <timer.h>
 
 #include <d3d11.h>
-#include <SimpleMath.h>
+#include "pointLight.h"
 
 using namespace DirectX::SimpleMath;
 
@@ -14,25 +14,25 @@ class CelestialBodyComponent : public SceneComponent
 protected:
 #pragma pack(push, 4)
 	struct VertexConstBuffer {
+		VertexConstBuffer()
+		{
+			ZeroMemory(this, sizeof(VertexConstBuffer));
+		}
+
 		XMFLOAT4X4 wvpMatrix;
 		XMFLOAT4X4 worldMatrix;
 	};
 
-	struct PointLightData {
-		Vector4 diffuseColor;
-		Vector4 specularColor;
-		Vector4 position;
-		float specularPower;
-		float innerRadius;
-		float outerRadius;
-		float _padding[1];
-	};
-
 	struct PixelConstBuffer {
+		PixelConstBuffer()
+		{
+			ZeroMemory(this, sizeof(PixelConstBuffer));
+		}
+
 		MaterialData material;		//32
-		PointLightData pointLight;	//80
-		Vector4 ambientLight;		//96
-		Vector4 cameraPos;			//112
+		PointLightData pointLight;	//64
+		Vector4 ambientLight;		//80
+		Vector4 cameraPos;			//96
 	};
 #pragma pack(pop)
 

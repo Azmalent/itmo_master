@@ -10,8 +10,8 @@
 struct Vertex
 {
 	Vector3 pos = Vector3::Zero;
-	Vector3 normal = Vector3::One;
-	Vector4 color = Vector4(0, 0, 0, 1);
+	Vector3 normal = Vector3(0, 0, -1);
+	Vector4 color = Vector4::One;
 
 public:
 	Vertex(float x, float y, float z, Vector3 normal);

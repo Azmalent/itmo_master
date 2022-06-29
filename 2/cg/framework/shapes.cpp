@@ -6,14 +6,14 @@ Mesh* Shapes::Make2DRectangle(Game& game, Material* material, float width, float
 	float halfHeight = height / 2;
 
 	std::vector<Vertex> vertices = {
-		Vertex(halfWidth, halfHeight,   z, Vector3(0, 0, 1), color),
-		Vertex(-halfWidth, -halfHeight, z, Vector3(0, 0, 1), color),
-		Vertex(halfWidth, -halfHeight,  z, Vector3(0, 0, 1), color),
-		Vertex(-halfWidth, halfHeight,  z, Vector3(0, 0, 1), color)
+		Vertex(halfWidth, halfHeight,   z, -Vector3::Forward, color),
+		Vertex(halfWidth, -halfHeight,  z, -Vector3::Forward, color),
+		Vertex(-halfWidth, -halfHeight, z, -Vector3::Forward, color),
+		Vertex(-halfWidth, halfHeight,  z, -Vector3::Forward, color)
 	};
 
 	std::vector<Vector3> tris = {
-		{0, 1, 2}, {1, 0, 3}
+		{0, 1, 2}, {2, 3, 0}
 	};
 
 	return new Mesh(game, vertices, tris, material);
