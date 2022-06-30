@@ -30,7 +30,7 @@ CelestialBodyComponent::CelestialBodyComponent(Game& game, float radius, Vector3
 	pixelConstBuffer.pointLight.color = Vector4::One;
 	pixelConstBuffer.pointLight.attenuation = Vector3(1, 0.08f, 0) / 2;
 
-	pixelConstBuffer.ambientLight = Vector4(0.25f, 0.25f, 0.25f, 0);
+	pixelConstBuffer.ambientLight = Vector4::One;
 
 	auto mesh = Shapes::MakeSphere(game, material, radius, 10, 10, color);
 	AddChild(new MeshComponent(game, mesh));

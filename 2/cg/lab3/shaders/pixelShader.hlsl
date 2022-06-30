@@ -75,7 +75,7 @@ LightResult doLighting(float4 P, float4 N)
 
 float4 main(FRAG_IN input) : SV_Target
 {
-	LightResult lit = doLighting(input.worldPos, input.normal);
+	LightResult lit = doLighting(input.worldPos, normalize(input.normal));
 
 	float4 emissive = material.emissive;
 	float4 ambient = material.ambient * float4(ambientLight, 1.0f) * ambientLightStrength;
